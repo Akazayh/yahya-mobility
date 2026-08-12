@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAHYA Mobility - Conditions generales de location</title>
+    <meta name="description" content="Conditions generales de location de vehicules chez YAHYA Mobility. Consultez nos regles d'age, caution, assurance, annulation et responsabilites.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .page-section {
+            padding: 8rem 0 4rem;
+        }
+
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .conditions-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+        }
+
+        .condition-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            border: 1px solid var(--border);
+            transition: transform var(--duration-slow) var(--ease), box-shadow var(--duration-slow) var(--ease), border-color var(--duration-slow) var(--ease);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .condition-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            opacity: 0.7;
+            transition: opacity var(--duration) var(--ease);
+        }
+
+        .condition-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            border-color: var(--border-accent);
+        }
+
+        .condition-card:hover::before {
+            opacity: 1;
+        }
+
+        .condition-card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .condition-card-header .icon-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--accent-subtle);
+            border: 1px solid var(--border-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .condition-card h2 {
+            color: var(--text-primary);
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+        }
+
+        .condition-card p, .condition-card li {
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+        }
+
+        .condition-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .condition-card strong {
+            color: var(--text-primary);
+        }
+
+        .condition-card ul {
+            margin-left: 1.5rem;
+            list-style: square;
+        }
+
+        .condition-card ul li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .condition-card ul li strong {
+            color: var(--text-primary);
+        }
+
+        /* Modern footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: var(--space-3xl) var(--space-xl) var(--space-xl);
+            text-align: center;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+        }
+
+        .footer a {
+            color: var(--accent);
+            transition: color var(--duration) var(--ease);
+        }
+
+        .footer a:hover {
+            color: var(--accent-hover);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            flex-wrap: wrap;
+            margin-top: var(--space-md);
+        }
+
+        @media (max-width: 768px) {
+            .condition-card {
+                padding: var(--space-lg);
+            }
+
+            .condition-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-sm);
+            }
+
+            .footer-links {
+                flex-direction: column;
+                align-items: center;
+                gap: var(--space-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav">
+            <a class="logo" href="accueil.html">
+                <img src="../assets/images/logo.png" alt="YAHYA Mobility" class="logo-img">
+            </a>
+            <div class="nav-toggle" id="navToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="../index.html">Accueil</a>
+                <a href="cars.html">Vehicules</a>
+                <a href="about.html">A propos</a>
+                <span id="userMenu"></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-section">
+        <div class="container">
+            <h1 class="page-title">Conditions generales de location</h1>
+
+            <div class="conditions-grid">
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-user-line"></i></div>
+                        <h2>1. Age et permis</h2>
+                    </div>
+                    <p>Le locataire doit avoir au moins <strong>21 ans</strong> et posseder un <strong>permis de conduire valide</strong> depuis au moins 1 an. Un justificatif sera demande lors de la prise du vehicule.</p>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-shield-line"></i></div>
+                        <h2>2. Caution</h2>
+                    </div>
+                    <p>Une caution est demandee a la prise du vehicule. Elle sert de garantie pour couvrir les eventuels dommages, exces de kilometrage ou frais supplementaires. Elle est restituee sous <strong>15 jours</strong> apres le retour du vehicule, deduction faite des eventuelles retenues.</p>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-car-line"></i></div>
+                        <h2>3. Etat du vehicule au retour</h2>
+                    </div>
+                    <p>Le vehicule doit etre rendu en <strong>bon etat, propre, avec le plein de carburant</strong> (essence/diesel). Tout dommage ou negligence (interieur sale, odeurs, rayures) sera facture au locataire.</p>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-alert-line"></i></div>
+                        <h2>4. Responsabilite des infractions</h2>
+                    </div>
+                    <p>Le locataire est seul responsable de toutes les infractions (stationnement, exces de vitesse, etc.) commises pendant la periode de location. Il s'engage a payer toutes les amendes et frais de recouvrement.</p>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-forbid-line"></i></div>
+                        <h2>5. Utilisation interdite</h2>
+                    </div>
+                    <p>Le vehicule ne doit <strong>pas</strong> etre utilise pour :</p>
+                    <ul>
+                        <li>Des activites illegales ou dangereuses</li>
+                        <li>Des competitions, courses, performances ou exhibitions</li>
+                        <li>Le transport de marchandises ou de personnes contre remuneration (sauf autorisation speciale)</li>
+                    </ul>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-tools-line"></i></div>
+                        <h2>6. Entretien et signalement des pannes</h2>
+                    </div>
+                    <p>Le locataire doit signaler immediatement tout probleme technique ou de maintenance a l'agence. A defaut, il sera responsable des dommages aggraves.</p>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-time-line"></i></div>
+                        <h2>7. Retard et kilometrage</h2>
+                    </div>
+                    <p>Tout retard de retour (au-dela d'1 heure) sera facture selon le tarif journalier en vigueur, sans depasser le prix de deux jours. Les kilometres supplementaires eventuels sont factures selon les conditions du contrat.</p>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-map-pin-line"></i></div>
+                        <h2>8. Sortie de la ville</h2>
+                    </div>
+                    <p>Le locataire s'engage a prevenir l'agence au moins <strong>48 heures a l'avance</strong> en cas de sortie de la ville de Tetouan (ou de la region convenue). Une majoration tarifaire peut s'appliquer.</p>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-settings-line"></i></div>
+                        <h2>9. Modification des conditions</h2>
+                    </div>
+                    <p>Les presentes conditions generales peuvent etre modifiees a tout moment. Les modifications seront applicables aux nouvelles reservations uniquement, apres publication sur le site.</p>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-scales-3-line"></i></div>
+                        <h2>10. Loi applicable et litiges</h2>
+                    </div>
+                    <p>Les presentes conditions sont regies par la <strong>loi marocaine</strong>. En cas de litige, les parties s'efforceront de trouver une solution amiable. A defaut, le tribunal de <strong>Tetouan</strong> sera competent.</p>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-calendar-close-line"></i></div>
+                        <h2>11. Annulation et modification de reservation</h2>
+                    </div>
+                    <ul>
+                        <li>Annulation plus de 7 jours avant le debut : remboursement integral.</li>
+                        <li>Annulation entre 2 et 7 jours avant : 50% du montant facture.</li>
+                        <li>Annulation moins de 48 heures avant : aucun remboursement.</li>
+                        <li>La modification des dates est possible sous reserve de disponibilite et de difference de tarif.</li>
+                    </ul>
+                </div>
+
+                <div class="condition-card">
+                    <div class="condition-card-header">
+                        <div class="icon-badge"><i class="ri-shield-check-line"></i></div>
+                        <h2>12. Assurance</h2>
+                    </div>
+                    <p>L'assurance incluse dans le contrat couvre la responsabilite civile au tiers. Les dommages au vehicule (franchise) restent a la charge du locataire, sauf souscription a l'assurance complementaire proposee lors de la reservation.</p>
+                    <p>Le locataire est informe que la franchise peut etre reduite ou supprimee moyennant un supplement journalier.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 YAHYA Mobility - Location de voitures. Tous droits reserves.</p>
+            <div class="footer-links">
+                <a href="conditions.html">Conditions generales</a>
+                <a href="about.html">A propos</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('open');
+            });
+        });
+    </script>
+
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script>
+        // Fonction pour afficher le menu utilisateur (identique aux autres pages)
+        function updateUserInterface() {
+            const currentUser = getCurrentClient();
+            const userMenu = document.getElementById('userMenu');
+            if (!userMenu) return;
+            if (currentUser) {
+                userMenu.innerHTML = `
+                    <span style="margin-right: 15px; color:var(--accent);">${currentUser.prenom} ${currentUser.nom}</span>
+                    <button id="logoutBtn" class="btn btn-outline" style="padding:0.45rem 1.2rem;font-size:0.88rem;">Deconnexion</button>
+                `;
+                document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                    localStorage.removeItem('currentClient');
+                    window.location.href = "login.html";
+                });
+            } else {
+                userMenu.innerHTML = `<a href="login.html" class="btn btn-auth">Se connecter</a>`;
+            }
+        }
+
+        // Cacher le lien de la page active (optionnel)
+        function hideCurrentPageLink() {
+            const currentPage = window.location.pathname.split('/').pop();
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPage) link.style.display = 'none';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUserInterface();
+            hideCurrentPageLink();
+        });
+    </script>
+</body>
+</html>

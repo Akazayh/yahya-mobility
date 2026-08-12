@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAHYA Mobility - Mes contrats</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .page-section {
+            padding: 8.2rem 0 4rem;
+        }
+
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            text-align: center;
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.02em;
+        }
+
+        .page-title i {
+            color: var(--accent);
+            margin-right: var(--space-sm);
+        }
+
+        .subtext {
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: -0.9rem;
+            margin-bottom: 2rem;
+            font-size: .95rem;
+        }
+
+        .contrats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.4rem;
+        }
+
+        .contrat-card {
+            background: var(--bg-card);
+            border-radius: 1.1rem;
+            padding: 1.35rem;
+            border: 1px solid var(--border);
+            transition: transform var(--duration-slow) var(--ease), border-color var(--duration-slow) var(--ease), box-shadow var(--duration-slow) var(--ease);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .contrat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+
+        .contrat-header {
+            display: flex;
+            justify-content: space-between;
+            gap: .8rem;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: .75rem;
+            margin-bottom: 1rem;
+        }
+
+        .contrat-id {
+            color: var(--accent);
+            font-weight: 700;
+            word-break: break-all;
+        }
+
+        .contrat-status {
+            padding: .25rem .75rem;
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-en-cours {
+            background: rgba(245,158,11,.12);
+            color: #fbbf24;
+            border: 1px solid rgba(245,158,11,.25);
+        }
+
+        .status-termine {
+            background: rgba(16,185,129,.12);
+            color: #6ee7b7;
+            border: 1px solid rgba(16,185,129,.25);
+        }
+
+        .status-annule {
+            background: rgba(239,68,68,.12);
+            color: #fca5a5;
+            border: 1px solid rgba(239,68,68,.25);
+        }
+
+        .contrat-info p {
+            margin: .55rem 0;
+            display: flex;
+            gap: .55rem;
+            align-items: flex-start;
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+        }
+
+        .contrat-info i {
+            color: var(--accent);
+            width: 22px;
+            flex: 0 0 22px;
+            margin-top: 2px;
+        }
+
+        .muted {
+            color: var(--text-muted);
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 3rem 1.25rem;
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            border: 2px dashed var(--border);
+        }
+
+        .empty-message i {
+            font-size: 3rem;
+            color: var(--gold);
+            opacity: 0.5;
+        }
+
+
+
+        /* Generic modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.72);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-xl);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            max-width: 720px;
+            width: 100%;
+            padding: 1.6rem;
+            border: 1px solid var(--border-accent);
+            position: relative;
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            max-height: min(88vh, 860px);
+            overflow: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            line-height: 1;
+            transition: color var(--duration) var(--ease);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .75rem 1rem;
+            margin-top: 1rem;
+        }
+
+        .details-grid p {
+            margin: 0;
+            background: rgba(255,255,255,.03);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: .75rem .85rem;
+            color: var(--text-secondary);
+        }
+
+        .details-grid strong {
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: .45rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: .9rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--green), var(--green-hover));
+            border: none;
+            padding: .95rem 1rem;
+            border-radius: var(--radius-full);
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            margin-top: var(--space-lg);
+            transition: all var(--duration) var(--ease);
+            box-shadow: 0 4px 16px rgba(16,185,129,0.25);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(16,185,129,0.3);
+        }
+
+        /* Payment modal */
+        .payment-modal .modal-content {
+            max-width: 820px;
+            width: min(92vw, 820px);
+            max-height: 88vh;
+            overflow: hidden;
+            padding: 0;
+            border: 1px solid var(--border-accent);
+            background: radial-gradient(circle at top right, rgba(59,130,246,.14), transparent 30%),
+                        radial-gradient(circle at bottom left, rgba(37,99,235,.10), transparent 26%),
+                        linear-gradient(180deg, rgba(15,23,42,.99), rgba(9,15,30,.99));
+        }
+
+        .modal-enter {
+            animation: modalRise .22s ease-out;
+        }
+
+        @keyframes modalRise {
+            from { opacity: 0; transform: translateY(18px) scale(.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .payment-shell {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1.2rem 1.2rem 1.05rem;
+            max-height: 88vh;
+            overflow: auto;
+            background: transparent;
+        }
+
+        .payment-header {
+            display: grid;
+            gap: .9rem;
+        }
+
+        .payment-kicker {
+            display: inline-flex;
+            width: fit-content;
+            padding: .45rem .85rem;
+            border-radius: var(--radius-full);
+            background: rgba(37,99,235,.20);
+            color: #dbeafe;
+            font-weight: 700;
+            font-size: .82rem;
+            letter-spacing: .2px;
+        }
+
+        .payment-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .payment-title-row h2 {
+            color: var(--text-primary);
+            font-size: 1.55rem;
+            line-height: 1.15;
+            margin-bottom: .38rem;
+            font-family: var(--font-heading);
+        }
+
+        .payment-title-row p {
+            color: var(--text-muted);
+            max-width: 48rem;
+            font-size: .95rem;
+        }
+
+        .payment-stepper {
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            padding-top: .1rem;
+        }
+
+        .step-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .5rem .75rem;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(255,255,255,.09);
+            background: rgba(255,255,255,.04);
+            color: #dbeafe;
+            font-size: .82rem;
+            font-weight: 700;
+            backdrop-filter: blur(8px);
+        }
+
+        .step-pill.active {
+            background: rgba(59,130,246,.18);
+            border-color: rgba(59,130,246,.52);
+            color: #dbeafe;
+        }
+
+        .payment-summary {
+            margin: 0;
+            background: linear-gradient(180deg, rgba(14,31,60,.92), rgba(12,23,46,.96));
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            border: 1px solid rgba(59,130,246,.16);
+        }
+
+        .payment-summary p {
+            margin: .35rem 0;
+            color: var(--text-secondary);
+        }
+
+        .payment-summary p strong {
+            color: var(--text-primary);
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .choice-block {
+            background: rgba(59,130,246,.05);
+            border: 1px solid rgba(59,130,246,.10);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+        }
+
+        .choice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: .85rem;
+        }
+
+        .choice-header h3 {
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: .15rem;
+        }
+
+        .choice-header p {
+            color: var(--text-muted);
+            font-size: .84rem;
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: .75rem;
+        }
+
+        .choice-card {
+            border: 1px solid rgba(59,130,246,.12);
+            background: linear-gradient(180deg, rgba(8,17,36,.98), rgba(12,25,49,.98));
+            color: var(--text-primary);
+            border-radius: .95rem;
+            min-height: 64px;
+            padding: .9rem .85rem;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            justify-content: flex-start;
+            cursor: pointer;
+            transition: all var(--duration) var(--ease);
+            box-shadow: 0 8px 18px rgba(0,0,0,.12);
+            font: inherit;
+        }
+
+        .choice-card i {
+            font-size: 1.15rem;
+            color: #93c5fd;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-accent);
+            background: linear-gradient(180deg, rgba(13,28,58,.98), rgba(12,25,49,.98));
+        }
+
+        .choice-card.active {
+            border-color: rgba(59,130,246,.95);
+            background: linear-gradient(180deg, rgba(59,130,246,.20), rgba(37,99,235,.10));
+            box-shadow: 0 10px 22px rgba(59,130,246,.16);
+        }
+
+        .choice-card span {
+            font-weight: 800;
+        }
+
+        .payment-footer {
+            display: grid;
+            gap: .85rem;
+            position: relative;
+            padding-top: 1rem;
+            margin-top: .25rem;
+            border-top: 1px solid rgba(59,130,246,.12);
+            background: transparent;
+        }
+
+        .amount-group {
+            margin: 0;
+        }
+
+        .amount-group label {
+            margin-bottom: .45rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: .95rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .btn-submit-pay {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            border: none;
+            padding: 1rem 1rem;
+            border-radius: var(--radius-full);
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            transition: all var(--duration) var(--ease);
+            box-shadow: 0 12px 24px var(--accent-glow);
+        }
+
+        .btn-submit-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(59,130,246,.30);
+        }
+
+        @media (max-width: 860px) {
+            .details-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .contrats-grid { grid-template-columns: 1fr; }
+
+            .choice-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav">
+            <a class="logo" href="accueil.html" aria-label="YAHYA Mobility">
+                <img src="../assets/images/logo.png" alt="YAHYA Mobility" class="logo-img">
+            </a>
+            <div class="nav-toggle" id="navToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="accueil.html">Accueil</a>
+                <a href="cars.html">Vehicules</a>
+                <a href="mes-reservations.html">Mes reservations</a>
+                <a href="mes-contrats.html">Mes contrats</a>
+                <a href="profil.html">Profil</a>
+                <a href="about.html">A propos</a>
+                <span id="userMenu"></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-section">
+        <div class="container">
+            <h1 class="page-title"><i class="ri-file-copy-line"></i> Mes contrats de location</h1>
+            <p class="subtext">Consultez vos contrats et reglez le montant restant en quelques clics.</p>
+            <div id="contratsContainer">
+                <div style="text-align:center;color:var(--text-muted);">Chargement...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal payment-modal" aria-hidden="true">
+        <div class="modal-content modal-enter">
+            <span id="closeModal" class="modal-close" aria-label="Fermer">&times;</span>
+
+            <div class="payment-shell">
+                <div class="payment-header">
+                    <div class="payment-kicker">Paiement du contrat</div>
+                    <div class="payment-title-row">
+                        <div>
+                            <h2>Validation rapide et elegante</h2>
+                            <p>Choisissez un mode, un type et confirmez un paiement local aligne sur votre base de donnees.</p>
+                        </div>
+                        <div class="payment-stepper" aria-label="Etapes du paiement">
+                            <span class="step-pill active">1 Mode</span>
+                            <span class="step-pill active">2 Type</span>
+                            <span class="step-pill">3 Montant</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-summary" id="paymentDetails"></div>
+
+                <div class="payment-grid">
+                    <section class="choice-block" data-group="mode">
+                        <div class="choice-header">
+                            <div>
+                                <h3>Mode de paiement</h3>
+                            </div>
+                        </div>
+                        <div class="choice-grid" id="modePaiementGroup">
+                            <button type="button" class="choice-card active" data-value="Especes">
+                                <i class="ri-money-dollar-circle-line"></i>
+                                <span>Especes</span>
+                            </button>
+                            <button type="button" class="choice-card" data-value="Carte">
+                                <i class="ri-bank-card-line"></i>
+                                <span>Carte</span>
+                            </button>
+                            <button type="button" class="choice-card" data-value="Virement">
+                                <i class="ri-exchange-funds-line"></i>
+                                <span>Virement</span>
+                            </button>
+                            <button type="button" class="choice-card" data-value="Autre">
+                                <i class="ri-more-2-fill"></i>
+                                <span>Autre</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="choice-block" data-group="type">
+                        <div class="choice-header">
+                            <div>
+                                <h3>Type de paiement</h3>
+                            </div>
+                        </div>
+                        <div class="choice-grid" id="typePaiementGroup">
+                            <button type="button" class="choice-card active" data-value="Location">
+                                <i class="ri-car-line"></i>
+                                <span>Location</span>
+                            </button>
+                            <button type="button" class="choice-card" data-value="Caution">
+                                <i class="ri-shield-line"></i>
+                                <span>Caution</span>
+                            </button>
+                            <button type="button" class="choice-card" data-value="Remboursement">
+                                <i class="ri-refund-line"></i>
+                                <span>Remboursement</span>
+                            </button>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="payment-footer">
+                    <div class="form-group amount-group">
+                        <label for="montantPaiement">Montant a payer (DH)</label>
+                        <input type="number" id="montantPaiement" step="0.01" min="0" required>
+                    </div>
+
+                    <button id="confirmPaymentBtn" class="btn-submit-pay"><i class="ri-checkbox-circle-line"></i> Confirmer le paiement</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div id="detailsModal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <span id="closeDetailsModal" class="modal-close" aria-label="Fermer">&times;</span>
+            <h3 style="color:var(--accent); font-size:1.25rem; font-family:var(--font-heading); display:flex; align-items:center; gap:var(--space-sm);"><i class="ri-file-list-line"></i> Details du contrat</h3>
+            <div id="detailsBody" class="details-grid"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p style="color:var(--text-muted);">&copy; 2026 YAHYA Mobility - Location de voitures</p>
+        </div>
+    </footer>
+
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('open');
+            });
+        });
+    </script>
+
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script>
+        let currentPaymentContract = null;
+        let selectedModePaiement = 'Especes';
+        let selectedTypePaiement = 'Location';
+
+        const ALLOWED_MODE_PAIEMENT = ['Especes', 'Carte', 'Virement', 'Autre'];
+        const ALLOWED_TYPE_PAIEMENT = ['Location', 'Caution', 'Remboursement'];
+
+        function setActiveChoice(groupId, value, fallbackValue) {
+            const group = document.getElementById(groupId);
+            if (!group) return;
+            const buttons = group.querySelectorAll('.choice-card');
+            const selected = [...buttons].find(btn => btn.dataset.value === value) || [...buttons].find(btn => btn.dataset.value === fallbackValue) || buttons[0];
+            buttons.forEach(btn => btn.classList.toggle('active', btn === selected));
+            return selected?.dataset.value || fallbackValue;
+        }
+
+        function syncPaymentChoices() {
+            selectedModePaiement = setActiveChoice('modePaiementGroup', selectedModePaiement, 'Especes');
+            selectedTypePaiement = setActiveChoice('typePaiementGroup', selectedTypePaiement, 'Location');
+        }
+
+        function money(value) {
+            const n = Number(value);
+            return Number.isFinite(n) ? n.toFixed(2) : '0.00';
+        }
+
+        function safeCars() {
+            try {
+                if (Array.isArray(window.cars)) return window.cars;
+                const stored = localStorage.getItem('cars');
+                return stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function updateUserInterface() {
+            const currentUser = getCurrentClient?.();
+            const userMenu = document.getElementById('userMenu');
+            if (!userMenu) return;
+
+            if (currentUser) {
+                userMenu.innerHTML = `
+                    <span style="margin-right: 12px; color:var(--accent);">${currentUser.prenom} ${currentUser.nom}</span>
+                    <button id="logoutBtn" class="btn btn-outline" style="padding:0.45rem 1.2rem;font-size:0.88rem;">Deconnexion</button>
+                `;
+                document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                    localStorage.removeItem('currentClient');
+                    window.location.href = "login.html";
+                });
+            } else {
+                userMenu.innerHTML = `<a href="login.html" class="btn btn-auth">Se connecter</a>`;
+                const protectedLinks = ['mes-reservations.html', 'mes-contrats.html', 'profil.html'];
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (protectedLinks.includes(href)) link.style.display = 'none';
+                });
+            }
+        }
+
+        function calculateLateFees(contrat) {
+            if (!contrat.Date_retour_reelle) return { daysLate: 0, fees: 0 };
+            const retour = new Date(contrat.Date_retour_reelle);
+            const finPrevue = new Date(contrat.Date_fin_effective);
+            if (isNaN(retour) || isNaN(finPrevue) || retour <= finPrevue) return { daysLate: 0, fees: 0 };
+            const daysLate = Math.ceil((retour - finPrevue) / (1000 * 60 * 60 * 24));
+            const fees = daysLate * Number(contrat.Prix_par_jour_applique || 0) * 1.5;
+            return { daysLate, fees };
+        }
+
+        function updateContractStatus(contrat) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const finPrevue = new Date(contrat.Date_fin_effective);
+            if (contrat.Statut === 'En cours' && !isNaN(finPrevue) && finPrevue < today) {
+                contrat.Statut = 'Termine';
+                contrat.Date_retour_reelle = contrat.Date_retour_reelle || finPrevue.toISOString().split('T')[0];
+
+                const carsList = safeCars();
+                const carIndex = carsList.findIndex(c => c.id == contrat.ID_voiture);
+                if (carIndex !== -1 && carsList[carIndex].statut === 'En location') {
+                    carsList[carIndex].statut = 'Disponible';
+                    localStorage.setItem('cars', JSON.stringify(carsList));
+                    if (typeof syncCars === 'function') syncCars();
+                    window.cars = carsList;
+                }
+
+                const allContrats = JSON.parse(localStorage.getItem('contrats') || '[]');
+                const idx = allContrats.findIndex(c => c.ID_contrat === contrat.ID_contrat);
+                if (idx !== -1) {
+                    allContrats[idx] = contrat;
+                    localStorage.setItem('contrats', JSON.stringify(allContrats));
+                }
+            }
+            return contrat;
+        }
+
+        function processPayment(contratId, montant, modePaiement, typePaiement) {
+        const contrats = JSON.parse(localStorage.getItem('contrats') || '[]');
+        const paiements = JSON.parse(localStorage.getItem('paiements') || '[]');
+        const contratIndex = contrats.findIndex(c => c.ID_contrat === contratId);
+        if (contratIndex === -1) return false;
+
+        const contrat = contrats[contratIndex];
+        const totalPayeActuel = Number(contrat.Montant_paye || 0);
+        const montantTotal = Number(contrat.Montant_total || 0);
+        const resteActuel = montantTotal - totalPayeActuel;
+
+        if (!ALLOWED_MODE_PAIEMENT.includes(modePaiement)) {
+            alert("Mode de paiement invalide.");
+            return false;
+        }
+        if (!ALLOWED_TYPE_PAIEMENT.includes(typePaiement)) {
+            alert("Type de paiement invalide.");
+            return false;
+        }
+        if (montant > resteActuel && typePaiement !== 'Remboursement') {
+            alert(`Le montant depasse le solde restant (${money(resteActuel)} DH).`);
+            return false;
+        }
+
+        // ICI : correction des noms de champs pour correspondre au Back Office
+        const newPayment = {
+            ID_paiement: 'PAY-' + Date.now(),
+            ID_contrat: contratId,
+            Date_paiement: new Date().toISOString().slice(0, 10),
+            Montant: montant,
+            Mode_paiement: modePaiement,
+            Type_paiement: typePaiement,
+            Statut: 'Paye'
+        };
+
+        paiements.push(newPayment);
+        localStorage.setItem('paiements', JSON.stringify(paiements));
+
+        const nouveauPaye = totalPayeActuel + montant;
+        contrat.Montant_paye = nouveauPaye;
+        contrat.Reste_a_payer = Math.max(0, montantTotal - nouveauPaye);
+        contrats[contratIndex] = contrat;
+        localStorage.setItem('contrats', JSON.stringify(contrats));
+
+        return true;
+    }
+
+        function openPaymentModal(contrat) {
+            const modal = document.getElementById('paymentModal');
+            const detailsDiv = document.getElementById('paymentDetails');
+            const totalPaye = Number(contrat.Montant_paye || 0);
+            const reste = Number(contrat.Montant_total || 0) - totalPaye;
+
+            detailsDiv.innerHTML = `
+                <p><strong><i class="ri-file-copy-line"></i> Contrat :</strong> ${contrat.ID_contrat}</p>
+                <p><strong><i class="ri-money-euro-circle-line"></i> Montant total :</strong> ${money(contrat.Montant_total)} DH</p>
+                <p><strong style="color:var(--green);">Deja paye :</strong> ${money(totalPaye)} DH</p>
+                <p><strong style="color:var(--gold);">Reste a payer :</strong> ${money(reste)} DH</p>
+            `;
+
+            document.getElementById('montantPaiement').value = reste.toFixed(2);
+            selectedModePaiement = 'Especes';
+            selectedTypePaiement = 'Location';
+            syncPaymentChoices();
+
+            currentPaymentContract = {
+                id: contrat.ID_contrat,
+                max: reste,
+                total: Number(contrat.Montant_total || 0)
+            };
+
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+        }
+
+        function closePaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            currentPaymentContract = null;
+        }
+
+        function openDetailsModal(contrat) {
+            const modal = document.getElementById('detailsModal');
+            const detailsBody = document.getElementById('detailsBody');
+            const currentUser = getCurrentClient?.();
+            const voiture = safeCars().find(c => c.id == contrat.ID_voiture);
+            const voitureName = voiture ? `${voiture.marque} ${voiture.modele}` : 'Voiture';
+            const totalPaye = Number(contrat.Montant_paye || 0);
+            const reste = Number(contrat.Montant_total || 0) - totalPaye;
+            const { daysLate, fees } = calculateLateFees(contrat);
+
+            const fields = [
+                ['ID contrat', contrat.ID_contrat],
+                ['Vehicule', voitureName],
+                ['Client', currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Client'],
+                ['Date debut', contrat.Date_debut_effective],
+                ['Date fin prevue', contrat.Date_fin_effective],
+                ['Date retour reelle', contrat.Date_retour_reelle || 'Non retourne'],
+                ['Kilometrage depart', `${contrat.Kilometrage_depart || 'Non renseigne'} km`],
+                ['Kilometrage retour', `${contrat.Kilometrage_retour || 'Non renseigne'} km`],
+                ['Prix par jour', `${money(contrat.Prix_par_jour_applique)} DH`],
+                ['Assurance', contrat.Assurance_incluse ? 'Oui' : 'Non'],
+                ['Montant total', `${money(contrat.Montant_total)} DH`],
+                ['Deja paye', `${money(totalPaye)} DH`],
+                ['Reste a payer', `${money(reste)} DH`],
+                ['Caution', `${money(contrat.Caution)} DH`],
+                ['Statut caution', contrat.Statut_caution || 'Non restituee'],
+                ['Statut contrat', contrat.Statut]
+            ];
+
+            if (daysLate > 0) {
+                fields.splice(13, 0, ['Retard', `${daysLate} jour(s) — ${money(fees)} DH de frais`]);
+            }
+
+            detailsBody.innerHTML = fields.map(([label, value]) => `
+                <p><strong>${label} :</strong> ${value}</p>
+            `).join('');
+
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeDetailsModal() {
+            const modal = document.getElementById('detailsModal');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+        }
+
+        function loadContrats() {
+            let allContrats = JSON.parse(localStorage.getItem('contrats') || '[]');
+            allContrats = allContrats.map(c => updateContractStatus(c));
+
+            const currentClient = getCurrentClient?.();
+            const container = document.getElementById('contratsContainer');
+
+            if (!currentClient) return;
+
+            const myContrats = allContrats.filter(c => c.ID_client === currentClient.id);
+
+            if (myContrats.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-message">
+                        <i class="ri-file-copy-line"></i>
+                        <p style="margin-top:.8rem;color:var(--text-secondary);">Vous n'avez aucun contrat pour le moment.</p>
+                        <button class="btn-home" id="goHome"><i class="ri-home-line"></i> Retour a l'accueil</button>
+                    </div>
+                `;
+                document.getElementById('goHome')?.addEventListener('click', () => {
+                    window.location.href = "accueil.html";
+                });
+                return;
+            }
+
+            let html = `<div class="contrats-grid">`;
+
+            myContrats.forEach(contrat => {
+                let statusClass = '';
+                if (contrat.Statut === 'En cours') statusClass = 'status-en-cours';
+                else if (contrat.Statut === 'Termine') statusClass = 'status-termine';
+                else if (contrat.Statut === 'Annule') statusClass = 'status-annule';
+
+                const voiture = safeCars().find(c => c.id == contrat.ID_voiture);
+                const voitureName = voiture ? `${voiture.marque} ${voiture.modele}` : 'Voiture';
+                const totalPaye = Number(contrat.Montant_paye || 0);
+                const montantTotal = Number(contrat.Montant_total || 0);
+                const resteAPayer = Math.max(0, montantTotal - totalPaye).toFixed(2);
+                const { daysLate, fees } = calculateLateFees(contrat);
+                const lateInfo = daysLate > 0
+                    ? `<span style="color:var(--red);"> (Retard: ${daysLate} j, Frais: ${money(fees)} DH)</span>`
+                    : '';
+
+                html += `
+                    <div class="contrat-card" data-contrat-id="${contrat.ID_contrat}">
+                        <div class="contrat-header">
+                            <span class="contrat-id">${contrat.ID_contrat}</span>
+                            <span class="contrat-status ${statusClass}">${contrat.Statut}</span>
+                        </div>
+                        <div class="contrat-info">
+                            <p><i class="ri-car-line"></i> ${voitureName}</p>
+                            <p><i class="ri-calendar-line"></i> Du ${contrat.Date_debut_effective} au ${contrat.Date_fin_effective}</p>
+                            <p><i class="ri-money-euro-circle-line"></i> Montant total : ${money(montantTotal)} DH</p>
+                            <p><i class="ri-wallet-line"></i> Deja paye : ${money(totalPaye)} DH</p>
+                            <p><i class="ri-bank-card-line"></i> Reste a payer : <strong style="color:var(--green);">${resteAPayer} DH</strong> ${lateInfo}</p>
+                            <p><i class="ri-shield-line"></i> Caution : ${money(contrat.Caution)} DH</p>
+                            <p><i class="ri-checkbox-circle-line"></i> Assurance : ${contrat.Assurance_incluse ? 'Oui' : 'Non'}</p>
+                            <p><i class="ri-bank-card-line"></i> Statut caution : ${contrat.Statut_caution || 'Non restituee'}</p>
+                        </div>
+                        ${contrat.Statut === 'En cours' && Number(resteAPayer) > 0
+                            ? `<button class="btn-payer" data-id="${contrat.ID_contrat}"><i class="ri-bank-card-line"></i> Payer maintenant</button>`
+                            : ''}
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+
+            document.querySelectorAll('.btn-payer').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const contratId = btn.getAttribute('data-id');
+                    const contrat = myContrats.find(c => c.ID_contrat === contratId);
+                    if (contrat) openPaymentModal(contrat);
+                });
+            });
+
+            document.querySelectorAll('.contrat-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.btn-payer')) return;
+                    const contratId = card.getAttribute('data-contrat-id');
+                    const contrat = myContrats.find(c => c.ID_contrat === contratId);
+                    if (contrat) openDetailsModal(contrat);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentClient = getCurrentClient?.();
+            if (!currentClient) {
+                alert("Veuillez vous connecter pour voir vos contrats.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            updateUserInterface();
+            if (typeof hideCurrentPageLink === 'function') hideCurrentPageLink();
+            loadContrats();
+
+            document.getElementById('confirmPaymentBtn')?.addEventListener('click', () => {
+                const contratId = currentPaymentContract?.id;
+                const montant = parseFloat(document.getElementById('montantPaiement').value);
+
+                if (!contratId || !Number.isFinite(montant) || montant <= 0) {
+                    alert("Veuillez saisir un montant valide.");
+                    return;
+                }
+
+                if (!selectedModePaiement || !selectedTypePaiement) {
+                    alert("Veuillez choisir un mode et un type de paiement.");
+                    return;
+                }
+
+                if (montant > currentPaymentContract.max && selectedTypePaiement !== 'Remboursement') {
+                    alert(`Le montant ne peut pas depasse le reste a payer (${money(currentPaymentContract.max)} DH).`);
+                    return;
+                }
+
+                if (processPayment(contratId, montant, selectedModePaiement, selectedTypePaiement)) {
+                    alert(`Paiement de ${money(montant)} DH effectue avec succes !`);
+                    closePaymentModal();
+                    loadContrats();
+                } else {
+                    alert("Erreur lors du paiement. Veuillez reessayer.");
+                }
+            });
+
+            document.getElementById('closeModal')?.addEventListener('click', closePaymentModal);
+            document.getElementById('closeDetailsModal')?.addEventListener('click', closeDetailsModal);
+
+            document.getElementById('paymentModal')?.addEventListener('click', (e) => {
+                if (e.target.id === 'paymentModal') closePaymentModal();
+            });
+
+            document.getElementById('detailsModal')?.addEventListener('click', (e) => {
+                if (e.target.id === 'detailsModal') closeDetailsModal();
+            });
+
+            document.getElementById('modePaiementGroup')?.addEventListener('click', (e) => {
+                const button = e.target.closest('.choice-card');
+                if (!button) return;
+                selectedModePaiement = button.dataset.value;
+                setActiveChoice('modePaiementGroup', selectedModePaiement, 'Especes');
+            });
+
+            document.getElementById('typePaiementGroup')?.addEventListener('click', (e) => {
+                const button = e.target.closest('.choice-card');
+                if (!button) return;
+                selectedTypePaiement = button.dataset.value;
+                setActiveChoice('typePaiementGroup', selectedTypePaiement, 'Location');
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closePaymentModal();
+                    closeDetailsModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

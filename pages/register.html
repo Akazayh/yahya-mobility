@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAHYA Mobility - Inscription</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-primary, #060611);
+            font-family: 'Inter', 'Outfit', sans-serif;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(59,130,246,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(16,185,129,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .register-container {
+            position: relative;
+            background: rgba(20, 20, 40, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            max-width: 700px;
+            width: 92vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 80px rgba(59, 130, 246, 0.06);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .register-header .icon-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .register-header .icon-circle i {
+            font-size: 1.5rem;
+            color: var(--accent, #3b82f6);
+        }
+
+        .register-header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary, #f1f5f9);
+            margin: 0 0 0.3rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .register-header p {
+            color: var(--text-muted, #64748b);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.9rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .input-group label {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-secondary, #94a3b8);
+        }
+
+        .input-group input {
+            background: var(--bg-primary, #0a0a1a);
+            border: 1px solid var(--border, rgba(255,255,255,0.06));
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary, #f1f5f9);
+            font-size: 0.92rem;
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent, #3b82f6);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-muted, #64748b);
+        }
+
+        .input-group .error-text {
+            color: #ef4444;
+            font-size: 0.78rem;
+            display: none;
+        }
+
+        .input-group.has-error input {
+            border-color: #ef4444;
+        }
+
+        .input-group.has-error .error-text {
+            display: block;
+        }
+
+        .full-width { grid-column: span 2; }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent, #3b82f6), #2563eb);
+            border: none;
+            padding: 0.85rem;
+            border-radius: 2rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1.2rem;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            color: var(--text-muted, #64748b);
+        }
+
+        .login-link a {
+            color: var(--accent, #3b82f6);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .msg {
+            padding: 0.6rem 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.88rem;
+            text-align: center;
+            display: none;
+        }
+
+        .msg.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+            display: block;
+        }
+
+        .msg.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: #6ee7b7;
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .register-container { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <div class="icon-circle">
+                <i class="ri-user-add-line"></i>
+            </div>
+            <h1>Créer un compte</h1>
+            <p>Rejoignez YAHYA Mobility en quelques étapes</p>
+        </div>
+
+        <div id="formMsg" class="msg"></div>
+
+        <form id="registerForm" novalidate>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Nom *</label>
+                    <input type="text" id="nom" placeholder="Dupont" required>
+                    <span class="error-text">Ce champ est requis</span>
+                </div>
+                <div class="input-group">
+                    <label>Prénom *</label>
+                    <input type="text" id="prenom" placeholder="Jean" required>
+                    <span class="error-text">Ce champ est requis</span>
+                </div>
+                <div class="input-group">
+                    <label>CIN *</label>
+                    <input type="text" id="cin" placeholder="AA123456" required>
+                    <span class="error-text">Ce champ est requis</span>
+                </div>
+                <div class="input-group">
+                    <label>N° permis *</label>
+                    <input type="text" id="num_permis" placeholder="P789012" required>
+                    <span class="error-text">Ce champ est requis</span>
+                </div>
+                <div class="input-group">
+                    <label>Date obtention permis *</label>
+                    <input type="date" id="date_permis" required>
+                    <span class="error-text">Ce champ est requis</span>
+                </div>
+                <div class="input-group">
+                    <label>Téléphone *</label>
+                    <input type="tel" id="telephone" placeholder="0612345678" required>
+                    <span class="error-text">Ce champ est requis</span>
+                </div>
+                <div class="input-group full-width">
+                    <label>Email *</label>
+                    <input type="email" id="email" placeholder="jean@example.com" required>
+                    <span class="error-text">Email invalide</span>
+                </div>
+                <div class="input-group full-width">
+                    <label>Mot de passe *</label>
+                    <input type="password" id="password" placeholder="••••••••" required minlength="4">
+                    <span class="error-text">Minimum 4 caractères</span>
+                </div>
+                <div class="input-group full-width">
+                    <label>Confirmer mot de passe *</label>
+                    <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                    <span class="error-text">Les mots de passe ne correspondent pas</span>
+                </div>
+                <div class="input-group full-width">
+                    <label>Adresse *</label>
+                    <input type="text" id="adresse" placeholder="123 Rue Exemple, Ville" required>
+                    <span class="error-text">Ce champ est requis</span>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">S'inscrire</button>
+        </form>
+
+        <div class="login-link">
+            Déjà un compte ? <a href="login.html">Se connecter</a>
+        </div>
+    </div>
+
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script>
+        (function() {
+            const form = document.getElementById('registerForm');
+            const msgEl = document.getElementById('formMsg');
+
+            function showError(msg) {
+                msgEl.textContent = msg;
+                msgEl.className = 'msg error';
+            }
+
+            function showSuccess(msg) {
+                msgEl.textContent = msg;
+                msgEl.className = 'msg success';
+            }
+
+            function clearMsg() {
+                msgEl.className = 'msg';
+            }
+
+            function clearErrors() {
+                document.querySelectorAll('.input-group').forEach(g => g.classList.remove('has-error'));
+            }
+
+            function markError(inputId) {
+                const group = document.getElementById(inputId)?.closest('.input-group');
+                if (group) group.classList.add('has-error');
+            }
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                clearMsg();
+                clearErrors();
+
+                const nom = document.getElementById('nom').value.trim();
+                const prenom = document.getElementById('prenom').value.trim();
+                const cin = document.getElementById('cin').value.trim();
+                const num_permis = document.getElementById('num_permis').value.trim();
+                const date_permis = document.getElementById('date_permis').value;
+                const telephone = document.getElementById('telephone').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const adresse = document.getElementById('adresse').value.trim();
+
+                // Validate required fields
+                let hasError = false;
+                if (!nom) { markError('nom'); hasError = true; }
+                if (!prenom) { markError('prenom'); hasError = true; }
+                if (!cin) { markError('cin'); hasError = true; }
+                if (!num_permis) { markError('num_permis'); hasError = true; }
+                if (!date_permis) { markError('date_permis'); hasError = true; }
+                if (!telephone) { markError('telephone'); hasError = true; }
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { markError('email'); hasError = true; }
+                if (!password || password.length < 4) { markError('password'); hasError = true; }
+                if (password !== confirmPassword) { markError('confirmPassword'); hasError = true; }
+                if (!adresse) { markError('adresse'); hasError = true; }
+
+                if (hasError) {
+                    showError('Veuillez remplir tous les champs correctement.');
+                    return;
+                }
+
+                // Check if email already exists
+                const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+                if (clients.some(c => c.email === email)) {
+                    showError('Un compte avec cet email existe déjà.');
+                    return;
+                }
+
+                // Hash password and create client
+                const hashedPassword = await hashPassword(password);
+                const newClient = {
+                    id: 'CL-' + Math.floor(100000 + Math.random() * 900000),
+                    nom: nom,
+                    prenom: prenom,
+                    cin: cin,
+                    numPermis: num_permis,
+                    datePermis: date_permis,
+                    telephone: telephone,
+                    email: email,
+                    password: hashedPassword,
+                    role: 'client',
+                    adresse: adresse,
+                    dateInscription: new Date().toISOString()
+                };
+
+                clients.push(newClient);
+                localStorage.setItem('clients', JSON.stringify(clients));
+
+                showSuccess('Compte créé avec succès ! Redirection vers la connexion...');
+
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            });
+        })();
+    </script>
+</body>
+</html>

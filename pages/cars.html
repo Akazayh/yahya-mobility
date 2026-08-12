@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAHYA Mobility - Nos véhicules</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .cars-hero {
+            position: relative;
+            padding: calc(var(--header-height) + var(--space-3xl)) 0 var(--space-3xl);
+            text-align: center;
+            overflow: hidden;
+            background: linear-gradient(160deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, rgba(59,130,246,0.06) 100%);
+        }
+
+        .cars-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse 600px 300px at 20% 50%, rgba(59,130,246,0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 400px 250px at 80% 40%, rgba(16,185,129,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cars-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+        }
+
+        .cars-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--accent-subtle);
+            border: 1px solid var(--border-accent);
+            color: var(--accent);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-xl);
+        }
+
+        .cars-hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+            line-height: 1.15;
+        }
+
+        .cars-hero h1 i {
+            color: var(--accent);
+            margin-right: var(--space-sm);
+        }
+
+        .cars-hero p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .cars-layout {
+            display: flex;
+            gap: var(--space-xl);
+            align-items: flex-start;
+        }
+
+        /* ── Sidebar ── */
+        .filters-sidebar {
+            width: 290px;
+            flex-shrink: 0;
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            padding: var(--space-xl);
+            height: fit-content;
+            position: sticky;
+            top: calc(var(--header-height) + var(--space-lg));
+            transition: box-shadow var(--duration) var(--ease);
+        }
+
+        .filters-sidebar:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .filters-title {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-primary);
+            padding-bottom: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filters-title i {
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+
+        .filter-group {
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-group:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: var(--space-md);
+        }
+
+        .filter-group h4 {
+            font-family: var(--font-heading);
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: var(--space-md);
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            margin-bottom: var(--space-xs);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background var(--duration) var(--ease);
+        }
+
+        .filter-option:hover {
+            background: var(--accent-subtle);
+        }
+
+        .filter-option input[type="radio"],
+        .filter-option input[type="checkbox"] {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .filter-option label i {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .price-slider {
+            width: 100%;
+            margin: var(--space-sm) 0;
+            accent-color: var(--accent);
+            height: 6px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .price-value {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-align: center;
+            margin-top: var(--space-sm);
+            background: var(--accent-subtle);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-sm);
+        }
+
+        .reset-filters {
+            width: 100%;
+            padding: 0.65rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--duration) var(--ease);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+        }
+
+        .reset-filters:hover {
+            background: var(--accent-subtle);
+            border-color: var(--border-accent);
+            color: var(--accent);
+        }
+
+        /* ── Results Area ── */
+        .results-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: var(--space-lg);
+            margin-bottom: var(--space-xl);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-header span:first-child {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .results-header span:first-child i {
+            color: var(--accent);
+        }
+
+        .cars-count {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: var(--accent-subtle);
+            border: 1px solid var(--border-accent);
+            color: var(--accent);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .cars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .car-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: transform var(--duration-slow) var(--ease),
+                        box-shadow var(--duration-slow) var(--ease),
+                        border-color var(--duration-slow) var(--ease);
+        }
+
+        .car-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            border-color: var(--border-accent);
+        }
+
+        .car-card .car-img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            padding: var(--space-lg);
+            transition: transform var(--duration-slow) var(--ease);
+        }
+
+        .car-card:hover .car-img {
+            transform: scale(1.05);
+        }
+
+        .car-card .car-info {
+            padding: var(--space-lg);
+        }
+
+        .car-card .car-title {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .car-card .car-details {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin: var(--space-sm) 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .car-card .car-details i {
+            margin-right: 4px;
+            color: var(--accent);
+        }
+
+        .car-card .car-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            margin-bottom: var(--space-sm);
+        }
+
+        .status-available {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .status-rented {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--gold);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+
+        .status-maintenance {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--text-muted);
+            border: 1px solid rgba(100, 116, 139, 0.25);
+        }
+
+        .status-unknown {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+
+        .car-card .car-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: var(--space-md) 0;
+        }
+
+        .car-card .car-price small {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+
+
+        /* ── Mobile Filter Toggle ── */
+        .mobile-filter-toggle {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: var(--space-lg);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--duration) var(--ease);
+        }
+
+        .mobile-filter-toggle:hover {
+            background: var(--accent-subtle);
+            border-color: var(--border-accent);
+        }
+
+        .mobile-filter-toggle i {
+            color: var(--accent);
+            transition: transform var(--duration) var(--ease);
+        }
+
+        .mobile-filter-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        /* ── Scroll Reveal ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .cars-grid {
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-filter-toggle {
+                display: flex;
+            }
+
+            .cars-layout {
+                flex-direction: column;
+            }
+
+            .filters-sidebar {
+                width: 100%;
+                position: static;
+                max-height: 0;
+                overflow: hidden;
+                padding: 0 var(--space-xl);
+                transition: max-height var(--duration-slow) var(--ease),
+                            padding var(--duration-slow) var(--ease);
+            }
+
+            .filters-sidebar.open {
+                max-height: 2000px;
+                padding: var(--space-xl);
+            }
+
+            .cars-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: var(--space-sm);
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cars-hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .cars-hero p {
+                font-size: 0.92rem;
+            }
+
+            .car-card .car-img {
+                height: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════
+         HEADER
+    ═══════════════════════════════════════════ -->
+    <header class="header" id="mainHeader">
+        <nav class="nav">
+            <a class="logo" href="accueil.html">
+                <img src="../assets/images/logo.png" alt="YAHYA Mobility" class="logo-img">
+            </a>
+
+            <div class="nav-toggle" id="navToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="nav-links" id="navLinks">
+                <a href="accueil.html">Accueil</a>
+                <a href="cars.html">Véhicules</a>
+                <a href="mes-reservations.html">Mes réservations</a>
+                <a href="mes-contrats.html">Mes contrats</a>
+                <a href="profil.html">Profil</a>
+                <a href="about.html">À propos</a>
+                <span id="userMenu">
+                    <a href="login.html" class="btn-auth btn-outline" style="margin-right: 8px;">Se connecter</a>
+                    <a href="register.html" class="btn-auth">S'inscrire</a>
+                </span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ═══════════════════════════════════════════
+         HERO SECTION
+    ═══════════════════════════════════════════ -->
+    <section class="cars-hero">
+        <div class="cars-hero-content reveal">
+            <div class="cars-hero-badge">
+                <i class="ri-steering-line"></i>
+                Notre flotte
+            </div>
+            <h1><i class="ri-car-line"></i>Explorez nos véhicules</h1>
+            <p>Trouvez le véhicule idéal pour votre prochain voyage. Filtrer par disponibilité, carburant, transmission et prix.</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         MAIN CONTENT
+    ═══════════════════════════════════════════ -->
+    <main class="section">
+        <div class="container">
+
+            <!-- Mobile Filter Toggle -->
+            <button class="mobile-filter-toggle" id="mobileFilterToggle">
+                <i class="ri-filter-3-line"></i>
+                Afficher les filtres
+                <i class="ri-arrow-down-s-line"></i>
+            </button>
+
+            <div class="cars-layout">
+
+                <!-- ── Sidebar Filters ── -->
+                <aside class="filters-sidebar reveal" id="filtersSidebar">
+                    <div class="filters-title">
+                        <i class="ri-filter-3-line"></i> Filtres
+                    </div>
+
+                    <!-- Disponibilité -->
+                    <div class="filter-group">
+                        <h4>Disponibilité</h4>
+                        <div class="filter-option">
+                            <input type="radio" name="disponibilite" value="all" checked>
+                            <label>Tous</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="disponibilite" value="Disponible">
+                            <label><i class="ri-checkbox-circle-line"></i> Disponible</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="disponibilite" value="En location">
+                            <label><i class="ri-pushpin-line"></i> En location</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="disponibilite" value="En maintenance">
+                            <label><i class="ri-tools-line"></i> En maintenance</label>
+                        </div>
+                    </div>
+
+                    <!-- Type de carburant -->
+                    <div class="filter-group">
+                        <h4>Type de carburant</h4>
+                        <div class="filter-option">
+                            <input type="checkbox" value="Essence">
+                            <label>Essence</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" value="Diesel">
+                            <label>Diesel</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" value="Electrique">
+                            <label>Électrique</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" value="Hybride">
+                            <label>Hybride</label>
+                        </div>
+                    </div>
+
+                    <!-- Boîte de vitesses -->
+                    <div class="filter-group">
+                        <h4>Boîte de vitesses</h4>
+                        <div class="filter-option">
+                            <input type="checkbox" value="Manuelle">
+                            <label>Manuelle</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" value="Automatique">
+                            <label>Automatique</label>
+                        </div>
+                    </div>
+
+                    <!-- Prix maximum -->
+                    <div class="filter-group">
+                        <h4>Prix maximum</h4>
+                        <input type="range" id="priceSlider" class="price-slider" min="0" max="1000" step="10" value="750">
+                        <div class="price-value">Jusqu'à <strong id="priceValue">750</strong> DH/jour</div>
+                    </div>
+
+                    <button class="reset-filters" id="resetFiltersBtn">
+                        <i class="ri-refresh-line"></i> Réinitialiser les filtres
+                    </button>
+                </aside>
+
+                <!-- ── Results Area ── -->
+                <div class="results-area">
+                    <div class="results-header reveal">
+                        <span><i class="ri-car-line"></i> Véhicules disponibles</span>
+                        <span class="cars-count" id="carsCount">0 véhicules</span>
+                    </div>
+
+                    <div id="carsGrid" class="cars-grid">
+                        <div class="no-cars" style="grid-column:1/-1;">
+                            <div class="ux-empty-state">
+                                <i class="ri-loader-4-line"></i>
+                                <p>Chargement des véhicules...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ═══════════════════════════════════════════
+         FOOTER
+    ═══════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <h3 class="footer-title">YAHYA Mobility</h3>
+                <p>Conduisez plus, payez moins</p>
+                <p>Location de voitures au Maroc – Tétouan, Casablanca, Tanger.</p>
+            </div>
+            <div>
+                <h3 class="footer-title">Liens utiles</h3>
+                <ul class="footer-links">
+                    <li><a href="cars.html">Véhicules</a></li>
+                    <li><a href="../index.html#contact-section">Contact</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="conditions.html">Conditions générales</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Destinations populaires</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Aéroport de Tétouan</a></li>
+                    <li><a href="#">Aéroport de Casablanca</a></li>
+                    <li><a href="#">Aéroport de Tanger</a></li>
+                    <li><a href="#">Aéroport de Rabat</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <p>© 2026 YAHYA Mobility. Tous droits réservés.</p>
+            <p>Location de voitures agréée – Réservez en ligne dès maintenant.</p>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════
+         SCRIPTS
+    ═══════════════════════════════════════════ -->
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/3d-effects.js"></script>
+    <script>
+        /* ── Header scroll ── */
+        (function() {
+            const header = document.getElementById('mainHeader');
+            if (!header) return;
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 20);
+            }, { passive: true });
+            if (window.scrollY > 20) header.classList.add('scrolled');
+        })();
+
+        /* ── Mobile nav toggle ── */
+        (function() {
+            const toggle = document.getElementById('navToggle');
+            const links  = document.getElementById('navLinks');
+            if (!toggle || !links) return;
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+                links.classList.toggle('open');
+            });
+            links.querySelectorAll('a').forEach(a => {
+                a.addEventListener('click', () => {
+                    toggle.classList.remove('active');
+                    links.classList.remove('open');
+                });
+            });
+        })();
+
+        /* ── Mobile filter toggle ── */
+        (function() {
+            const btn    = document.getElementById('mobileFilterToggle');
+            const sidebar = document.getElementById('filtersSidebar');
+            if (!btn || !sidebar) return;
+            btn.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                btn.classList.toggle('active');
+                btn.querySelector('i:last-child').className =
+                    sidebar.classList.contains('open')
+                        ? 'ri-arrow-up-s-line'
+                        : 'ri-arrow-down-s-line';
+                btn.childNodes[1].textContent =
+                    sidebar.classList.contains('open')
+                        ? 'Masquer les filtres'
+                        : 'Afficher les filtres';
+            });
+        })();
+
+        /* ── Scroll reveal (IntersectionObserver) ── */
+        (function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        })();
+
+        /* ── Auth UI ── */
+        function updateUserInterface() {
+            const currentUser = getCurrentClient();
+            const userMenu = document.getElementById('userMenu');
+            if (!userMenu) return;
+
+            if (currentUser) {
+                userMenu.innerHTML = `
+                    <span style="margin-right:15px;color:var(--accent);font-weight:600;">${currentUser.prenom} ${currentUser.nom}</span>
+                    <button id="logoutBtn" style="background:transparent;border:1px solid var(--border-accent);color:var(--accent);padding:0.45rem 1.1rem;border-radius:var(--radius-full);cursor:pointer;font-weight:600;font-size:0.85rem;transition:all 0.25s;">Déconnexion</button>
+                `;
+                document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                    localStorage.removeItem('currentClient');
+                    window.location.href = "login.html";
+                });
+            } else {
+                const protectedLinks = ['mes-reservations.html', 'mes-contrats.html', 'profil.html'];
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (protectedLinks.includes(href)) link.style.display = 'none';
+                });
+            }
+        }
+
+        /* ── Cars Data & Filters ── */
+        let allCars = getCars();
+
+        const carsGrid      = document.getElementById('carsGrid');
+        const carsCountSpan  = document.getElementById('carsCount');
+        const priceSlider    = document.getElementById('priceSlider');
+        const priceValueSpan = document.getElementById('priceValue');
+        const resetBtn       = document.getElementById('resetFiltersBtn');
+
+        let disponibiliteFilter = 'all';
+        let carburantFilters    = [];
+        let boiteFilters        = [];
+        let maxPrice            = 750;
+
+        priceSlider.addEventListener('input', function() {
+            maxPrice = parseInt(this.value);
+            priceValueSpan.innerText = maxPrice;
+            applyFilters();
+        });
+
+        document.querySelectorAll('input[name="disponibilite"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                disponibiliteFilter = this.value;
+                applyFilters();
+            });
+        });
+
+        document.querySelectorAll('.filter-group input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const group      = this.closest('.filter-group');
+                const groupTitle = group.querySelector('h4').innerText;
+                if (groupTitle === 'Type de carburant') {
+                    if (this.checked) carburantFilters.push(this.value);
+                    else carburantFilters = carburantFilters.filter(v => v !== this.value);
+                } else if (groupTitle === 'Boîte de vitesses') {
+                    if (this.checked) boiteFilters.push(this.value);
+                    else boiteFilters = boiteFilters.filter(v => v !== this.value);
+                }
+                applyFilters();
+            });
+        });
+
+        resetBtn.addEventListener('click', function() {
+            disponibiliteFilter = 'all';
+            carburantFilters    = [];
+            boiteFilters        = [];
+            maxPrice            = 750;
+            priceSlider.value   = 750;
+            priceValueSpan.innerText = '750';
+
+            document.querySelectorAll('input[name="disponibilite"]').forEach(radio => {
+                radio.checked = radio.value === 'all';
+            });
+            document.querySelectorAll('.filter-group input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            applyFilters();
+        });
+
+        function filterCars() {
+            return allCars.filter(car => {
+                if (disponibiliteFilter !== 'all' && car.statut !== disponibiliteFilter) return false;
+                if (carburantFilters.length > 0 && !carburantFilters.includes(car.carburant)) return false;
+                if (boiteFilters.length > 0 && !boiteFilters.includes(car.boite)) return false;
+                if (car.prix_par_jour > maxPrice) return false;
+                return true;
+            });
+        }
+
+        function displayFilteredCars() {
+            const filtered = filterCars();
+            carsCountSpan.innerText = filtered.length + ' véhicule' + (filtered.length > 1 ? 's' : '');
+
+            if (filtered.length === 0) {
+                renderEmptyState(carsGrid, "Aucun véhicule ne correspond à vos critères.", "ri-search-line");
+                return;
+            }
+
+            carsGrid.innerHTML = '';
+            filtered.forEach((car, index) => {
+                let statusText   = '';
+                let statusIcon   = '';
+                let statusClass  = '';
+                let disabledAttr = '';
+                let buttonText   = '<i class="ri-eye-line"></i> Voir les détails';
+
+                if (car.statut === 'Disponible') {
+                    statusText  = 'Disponible';
+                    statusIcon  = '<i class="ri-checkbox-circle-line"></i>';
+                    statusClass = 'status-available';
+                    disabledAttr = '';
+                } else if (car.statut === 'En location') {
+                    statusText  = 'En location';
+                    statusIcon  = '<i class="ri-pushpin-line"></i>';
+                    statusClass = 'status-rented';
+                    disabledAttr = 'disabled';
+                    buttonText  = '<i class="ri-pushpin-line"></i> Indisponible';
+                } else if (car.statut === 'En maintenance') {
+                    statusText  = 'En maintenance';
+                    statusIcon  = '<i class="ri-tools-line"></i>';
+                    statusClass = 'status-maintenance';
+                    disabledAttr = 'disabled';
+                    buttonText  = '<i class="ri-tools-line"></i> Indisponible';
+                } else {
+                    statusText  = car.statut;
+                    statusIcon  = '<i class="ri-question-line"></i>';
+                    statusClass = 'status-unknown';
+                    disabledAttr = 'disabled';
+                    buttonText  = '<i class="ri-question-line"></i> Non disponible';
+                }
+
+                const card = document.createElement('div');
+                card.className = 'car-card reveal reveal-delay-' + (index % 3 + 1);
+                card.innerHTML = `
+                    <img src="${car.img}" alt="${car.marque} ${car.modele}" class="car-img">
+                    <div class="car-info">
+                        <h3 class="car-title">${car.marque} ${car.modele}</h3>
+                        <div class="car-details">
+                            <span><i class="ri-flashlight-line"></i> ${car.carburant}</span>
+                            <span><i class="ri-settings-3-line"></i> ${car.boite}</span>
+                        </div>
+                        <div class="car-status ${statusClass}">${statusIcon} ${statusText}</div>
+                        <div class="car-price">${car.prix_par_jour} MAD <small>/ jour</small></div>
+                        <button class="btn-details" data-id="${car.id}" ${disabledAttr}>${buttonText}</button>
+                    </div>
+                `;
+                carsGrid.appendChild(card);
+            });
+
+            /* observe newly created reveal elements */
+            requestAnimationFrame(() => {
+                const revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+                carsGrid.querySelectorAll('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+            });
+
+            document.querySelectorAll('.btn-details:not([disabled])').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const carId = btn.getAttribute('data-id');
+                    handleDetailButton(carId, btn);
+                });
+            });
+        }
+
+        function applyFilters() {
+            showLoading();
+            setTimeout(() => {
+                displayFilteredCars();
+                hideLoading();
+            }, 400);
+        }
+
+        /* ── Detail button auth check ── */
+        function handleDetailButton(carId, btnElement) {
+            const currentUser = getCurrentClient();
+            if (!currentUser) {
+                alert("Veuillez vous connecter pour voir les détails d'un véhicule.");
+                window.location.href = "login.html";
+                return;
+            }
+            window.location.href = `car-details.html?id=${carId}`;
+        }
+
+        /* ── Init ── */
+        updateUserInterface();
+        hideCurrentPageLink();
+
+        if (allCars.length === 0) {
+            carsGrid.innerHTML = `
+                <div style="grid-column:1/-1;" class="ux-empty-state">
+                    <i class="ri-error-warning-line"></i>
+                    <p>Erreur: Liste des voitures non disponible.</p>
+                </div>`;
+        } else {
+            applyFilters();
+        }
+    </script>
+</body>
+</html>

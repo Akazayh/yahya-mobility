@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAHYA Mobility - Nouvelle réservation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        /* ── Reservation Hero ── */
+        .reservation-hero {
+            position: relative;
+            padding: calc(var(--header-height) + var(--space-3xl)) 0 var(--space-3xl);
+            text-align: center;
+            overflow: hidden;
+            background: linear-gradient(160deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, rgba(59,130,246,0.06) 100%);
+        }
+        .reservation-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 600px 300px at 20% 50%, rgba(59,130,246,0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 400px 250px at 80% 40%, rgba(16,185,129,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .reservation-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+        }
+        .reservation-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--accent-subtle);
+            border: 1px solid var(--border-accent);
+            color: var(--accent);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-xl);
+        }
+        .reservation-hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+            line-height: 1.15;
+        }
+        .reservation-hero h1 i {
+            color: var(--accent);
+            margin-right: var(--space-sm);
+        }
+        .reservation-hero p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* ── Container ── */
+        .reservation-container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+        }
+
+        /* ── Stepper ── */
+        .stepper {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-2xl);
+            position: relative;
+        }
+        .stepper::before {
+            content: '';
+            position: absolute;
+            top: 22px;
+            left: 15%;
+            right: 15%;
+            height: 3px;
+            background: var(--border);
+            border-radius: var(--radius-full);
+            z-index: 0;
+        }
+        .step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+        .step-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-full);
+            padding: 0.45rem 1.1rem 0.45rem 0.6rem;
+            transition: all var(--duration-slow) var(--ease);
+            cursor: default;
+        }
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: var(--bg-primary);
+            color: var(--text-muted);
+            border: 2px solid var(--border);
+            transition: all var(--duration-slow) var(--ease);
+            flex-shrink: 0;
+        }
+        .step-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color var(--duration) var(--ease);
+            white-space: nowrap;
+        }
+        .step.active .step-pill {
+            background: var(--accent-subtle);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow), 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .step.active .step-number {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .step.active .step-label {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .step.completed .step-pill {
+            background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.3);
+        }
+        .step.completed .step-number {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green);
+        }
+        .step.completed .step-label {
+            color: var(--green);
+        }
+
+        /* ── Form Card (Glass morphism) ── */
+        .form-card {
+            background: rgba(17, 24, 39, 0.65);
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg), 0 0 60px rgba(59,130,246,0.04);
+            animation: cardFadeIn 0.4s var(--ease) forwards;
+        }
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border);
+        }
+        .form-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-subtle);
+            color: var(--accent);
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        .form-card-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .form-card-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ── Form Grid ── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-lg);
+        }
+        .form-grid .input-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* ── Input Groups with focus glow ── */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .input-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        .input-group input {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.8rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color var(--duration) var(--ease),
+                        box-shadow var(--duration) var(--ease),
+                        background var(--duration) var(--ease);
+        }
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow), 0 0 16px rgba(59,130,246,0.1);
+            background: rgba(6,6,17,0.9);
+        }
+        .input-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* ── Date Picker Wrapper ── */
+        .date-picker-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .date-picker-wrapper input {
+            flex: 1;
+            padding-right: 2.8rem;
+        }
+        .calendar-icon {
+            position: absolute;
+            right: 14px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            pointer-events: auto;
+            z-index: 2;
+            transition: color var(--duration) var(--ease),
+                        transform var(--duration) var(--ease);
+        }
+        .calendar-icon:hover {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        /* ── Summary / Confirmation ── */
+        .confirmation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: var(--space-xl);
+        }
+        .confirmation-cell {
+            background: var(--bg-primary);
+            padding: var(--space-md) var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+        .confirmation-cell i {
+            color: var(--accent);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .confirmation-cell .cell-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 600;
+        }
+        .confirmation-cell .cell-value {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .confirmation-cell .cell-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .confirmation-total {
+            background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(16,185,129,0.08) 100%);
+            border: 1px solid var(--border-accent);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .confirmation-total-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .confirmation-total-value {
+            font-size: 1.5rem;
+            color: var(--accent);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* ── Navigation Buttons ── */
+        .form-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: var(--space-2xl);
+            gap: var(--space-md);
+        }
+
+
+        /* ── Error message ── */
+        .error-message {
+            color: var(--red);
+            font-size: 0.82rem;
+            margin-top: var(--space-sm);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .reservation-hero {
+                padding: calc(var(--header-height) + var(--space-2xl)) 0 var(--space-2xl);
+            }
+            .reservation-container {
+                padding: 0 var(--space-md);
+            }
+            .form-card {
+                padding: var(--space-lg);
+                border-radius: var(--radius-lg);
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .confirmation-grid {
+                grid-template-columns: 1fr;
+            }
+            .stepper {
+                gap: var(--space-xs);
+            }
+            .step-pill {
+                padding: 0.35rem 0.7rem 0.35rem 0.45rem;
+            }
+            .step-number {
+                width: 28px;
+                height: 28px;
+                font-size: 0.78rem;
+            }
+            .step-label {
+                font-size: 0.75rem;
+            }
+            .form-nav {
+                flex-direction: column-reverse;
+            }
+            .confirmation-total {
+                flex-direction: column;
+                gap: var(--space-sm);
+                text-align: center;
+            }
+        }
+        @media (max-width: 480px) {
+            .step-label {
+                display: none;
+            }
+            .step-pill {
+                padding: 0.35rem 0.45rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════
+         HEADER
+    ═══════════════════════════════════════════ -->
+    <header class="header" id="mainHeader">
+        <nav class="nav">
+            <a class="logo" href="accueil.html">
+                <img src="../assets/images/logo.png" alt="YAHYA Mobility" class="logo-img">
+            </a>
+
+            <div class="nav-toggle" id="navToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="nav-links" id="navLinks">
+                <a href="accueil.html">Accueil</a>
+                <a href="cars.html">Véhicules</a>
+                <a href="mes-reservations.html">Mes réservations</a>
+                <a href="mes-contrats.html">Mes contrats</a>
+                <a href="profil.html">Profil</a>
+                <a href="about.html">À propos</a>
+                <span id="userMenu"></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ═══════════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════════ -->
+    <section class="reservation-hero">
+        <div class="reservation-hero-content reveal">
+            <div class="reservation-hero-badge">
+                <i class="ri-steering-line"></i>
+                Réservation
+            </div>
+            <h1><i class="ri-calendar-check-line"></i>Créez votre réservation</h1>
+            <p>Remplissez les informations ci-dessous en 3 étapes simples pour réserver votre véhicule idéal.</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         MAIN CONTENT
+    ═══════════════════════════════════════════ -->
+    <main class="section">
+        <div class="reservation-container">
+
+            <!-- Stepper -->
+            <div class="stepper" id="stepper">
+                <div class="step active" data-step="1">
+                    <div class="step-pill">
+                        <div class="step-number">1</div>
+                        <span class="step-label">Informations</span>
+                    </div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-pill">
+                        <div class="step-number">2</div>
+                        <span class="step-label">Dates</span>
+                    </div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-pill">
+                        <div class="step-number">3</div>
+                        <span class="step-label">Confirmation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ Step 1 : Informations client ═══ -->
+            <div class="form-card" id="step1">
+                <div class="form-card-header">
+                    <div class="form-card-icon"><i class="ri-user-line"></i></div>
+                    <div>
+                        <div class="form-card-title">Vos informations</div>
+                        <div class="form-card-subtitle">Renseignez vos données personnelles et votre permis</div>
+                    </div>
+                </div>
+                <div class="form-grid" id="clientForm">
+                    <div class="input-group">
+                        <label for="nom">Nom *</label>
+                        <input type="text" id="nom" placeholder="Dupont">
+                    </div>
+                    <div class="input-group">
+                        <label for="prenom">Prénom *</label>
+                        <input type="text" id="prenom" placeholder="Jean">
+                    </div>
+                    <div class="input-group">
+                        <label for="cin">CIN *</label>
+                        <input type="text" id="cin" placeholder="AA123456">
+                    </div>
+                    <div class="input-group">
+                        <label for="permis">N° permis *</label>
+                        <input type="text" id="permis" placeholder="P789012">
+                    </div>
+                    <div class="input-group">
+                        <label for="datePermis">Date obtention permis *</label>
+                        <input type="date" id="datePermis">
+                    </div>
+                    <div class="input-group">
+                        <label for="telephone">Téléphone *</label>
+                        <input type="tel" id="telephone" placeholder="0612345678">
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" placeholder="jean@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="adresse">Adresse *</label>
+                        <input type="text" id="adresse" placeholder="123 rue de Paris">
+                    </div>
+                </div>
+                <div class="form-nav">
+                    <span></span>
+                    <button class="btn-nav btn-nav-next" id="toStep2">
+                        Continuer <i class="ri-arrow-right-line"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ═══ Step 2 : Dates de location ═══ -->
+            <div class="form-card" id="step2" style="display:none;">
+                <div class="form-card-header">
+                    <div class="form-card-icon"><i class="ri-calendar-line"></i></div>
+                    <div>
+                        <div class="form-card-title">Dates de location</div>
+                        <div class="form-card-subtitle">Choisissez la période de votre location</div>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="dateDebut">Date de début *</label>
+                        <div class="date-picker-wrapper">
+                            <input type="date" id="dateDebut" required>
+                            <i class="ri-calendar-line calendar-icon" data-target="dateDebut"></i>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="dateFin">Date de fin *</label>
+                        <div class="date-picker-wrapper">
+                            <input type="date" id="dateFin" required>
+                            <i class="ri-calendar-line calendar-icon" data-target="dateFin"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-nav">
+                    <button class="btn-nav btn-nav-prev" id="backToStep1">
+                        <i class="ri-arrow-left-line"></i> Retour
+                    </button>
+                    <button class="btn-nav btn-nav-next" id="toStep3">
+                        Continuer <i class="ri-arrow-right-line"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ═══ Step 3 : Confirmation ═══ -->
+            <div class="form-card" id="step3" style="display:none;">
+                <div class="form-card-header">
+                    <div class="form-card-icon" style="background:rgba(16,185,129,0.1);color:var(--green);">
+                        <i class="ri-checkbox-circle-line"></i>
+                    </div>
+                    <div>
+                        <div class="form-card-title">Récapitulatif</div>
+                        <div class="form-card-subtitle">Vérifiez vos informations avant de confirmer</div>
+                    </div>
+                </div>
+                <div id="confirmationContent"></div>
+                <div class="form-nav">
+                    <button class="btn-nav btn-nav-prev" id="backToStep2">
+                        <i class="ri-arrow-left-line"></i> Retour
+                    </button>
+                    <button class="btn-nav btn-nav-confirm" id="confirmReservation">
+                        <i class="ri-checkbox-circle-line"></i> Confirmer la réservation
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ═══════════════════════════════════════════
+         FOOTER
+    ═══════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <h3 class="footer-title">YAHYA Mobility</h3>
+                <p>Conduisez plus, payez moins</p>
+                <p>Location de voitures au Maroc – Tétouan, Casablanca, Tanger.</p>
+            </div>
+            <div>
+                <h3 class="footer-title">Liens utiles</h3>
+                <ul class="footer-links">
+                    <li><a href="cars.html">Véhicules</a></li>
+                    <li><a href="../index.html#contact-section">Contact</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="conditions.html">Conditions générales</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Destinations populaires</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Aéroport de Tétouan</a></li>
+                    <li><a href="#">Aéroport de Casablanca</a></li>
+                    <li><a href="#">Aéroport de Tanger</a></li>
+                    <li><a href="#">Aéroport de Rabat</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <p>© 2026 YAHYA Mobility. Tous droits réservés.</p>
+            <p>Location de voitures agréée – Réservez en ligne dès maintenant.</p>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════
+         SCRIPTS
+    ═══════════════════════════════════════════ -->
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/cars.js"></script>
+    <script src="../assets/js/3d-effects.js"></script>
+    <script>
+        /* ── Header scroll ── */
+        (function() {
+            const header = document.getElementById('mainHeader');
+            if (!header) return;
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 20);
+            }, { passive: true });
+            if (window.scrollY > 20) header.classList.add('scrolled');
+        })();
+
+        /* ── Mobile nav toggle ── */
+        (function() {
+            const toggle = document.getElementById('navToggle');
+            const links  = document.getElementById('navLinks');
+            if (!toggle || !links) return;
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+                links.classList.toggle('open');
+            });
+            links.querySelectorAll('a').forEach(a => {
+                a.addEventListener('click', () => {
+                    toggle.classList.remove('active');
+                    links.classList.remove('open');
+                });
+            });
+        })();
+
+        /* ── Scroll reveal ── */
+        (function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        })();
+
+        // ========== INTERFACE UTILISATEUR ==========
+        function updateUserInterface() {
+            const currentUser = getCurrentClient();
+            const userMenu = document.getElementById('userMenu');
+            if (!userMenu) return;
+            if (currentUser) {
+                userMenu.innerHTML = `
+                    <span style="margin-right: 15px; color:var(--accent); font-weight:500;">${currentUser.prenom} ${currentUser.nom}</span>
+                    <button id="logoutBtn" class="btn-auth btn-outline">Déconnexion</button>
+                `;
+                document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                    localStorage.removeItem('currentClient');
+                    window.location.href = "login.html";
+                });
+            } else {
+                userMenu.innerHTML = `
+                    <a href="login.html" class="btn-auth btn-outline" style="margin-right: 8px;">Se connecter</a>
+                    <a href="register.html" class="btn-auth">S'inscrire</a>
+                `;
+                const protectedLinks = ['mes-reservations.html', 'mes-contrats.html', 'profil.html'];
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (protectedLinks.includes(href)) link.style.display = 'none';
+                });
+            }
+        }
+
+        // ========== VÉRIFICATION DE DISPONIBILITÉ ==========
+        function isCarAvailable(carId, startDate, endDate) {
+            const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+            const contrats = JSON.parse(localStorage.getItem('contrats') || '[]');
+
+            const conflictingReservation = reservations.some(res => {
+                if (res.voitureId != carId) return false;
+                if (res.statut === 'Annulée' || res.statut === 'Expirée') return false;
+                const resStart = new Date(res.dateDebut);
+                const resEnd = new Date(res.dateFin);
+                const reqStart = new Date(startDate);
+                const reqEnd = new Date(endDate);
+                return (reqStart < resEnd && reqEnd > resStart);
+            });
+            if (conflictingReservation) return false;
+
+            const conflictingContrat = contrats.some(ctr => {
+                if (ctr.ID_voiture != carId) return false;
+                if (ctr.Statut !== 'En cours') return false;
+                const ctrStart = new Date(ctr.Date_début_effective);
+                const ctrEnd = new Date(ctr.Date_fin_effective);
+                const reqStart = new Date(startDate);
+                const reqEnd = new Date(endDate);
+                return (reqStart < ctrEnd && reqEnd > ctrStart);
+            });
+            return !conflictingContrat;
+        }
+
+        // ========== CHARGEMENT DES DONNÉES ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentClient = getCurrentClient();
+            if (!currentClient) {
+                alert("Veuillez vous connecter pour effectuer une réservation.");
+                window.location.href = "login.html";
+                return;
+            }
+            updateUserInterface();
+            hideCurrentPageLink();
+
+            const selectedCarId = localStorage.getItem('selectedCarId');
+            const assuranceChosen = localStorage.getItem('assuranceChosen') === 'true';
+            const assurancePrice = parseInt(localStorage.getItem('assurancePrice')) || 45;
+            const car = typeof cars !== 'undefined' ? cars.find(c => c.id === parseInt(selectedCarId)) : null;
+
+            if (!car) {
+                alert("Aucune voiture sélectionnée. Retour à l'accueil.");
+                window.location.href = "accueil.html";
+                return;
+            }
+
+            // Préremplir les champs client
+            if (currentClient.nom) document.getElementById('nom').value = currentClient.nom;
+            if (currentClient.prenom) document.getElementById('prenom').value = currentClient.prenom;
+            if (currentClient.cin) document.getElementById('cin').value = currentClient.cin;
+            if (currentClient.numPermis) document.getElementById('permis').value = currentClient.numPermis;
+            if (currentClient.datePermis) document.getElementById('datePermis').value = currentClient.datePermis;
+            if (currentClient.telephone) document.getElementById('telephone').value = currentClient.telephone;
+            if (currentClient.email) document.getElementById('email').value = currentClient.email;
+            if (currentClient.adresse) document.getElementById('adresse').value = currentClient.adresse;
+
+            // ========== GESTION DES ÉTAPES ==========
+            let currentStep = 1;
+            function showStep(step) {
+                document.getElementById('step1').style.display = step === 1 ? 'block' : 'none';
+                document.getElementById('step2').style.display = step === 2 ? 'block' : 'none';
+                document.getElementById('step3').style.display = step === 3 ? 'block' : 'none';
+                document.querySelectorAll('.step').forEach((el, idx) => {
+                    const stepNum = idx + 1;
+                    if (stepNum === step) el.classList.add('active');
+                    else el.classList.remove('active');
+                    if (stepNum < step) el.classList.add('completed');
+                    else el.classList.remove('completed');
+                });
+                currentStep = step;
+            }
+
+            function getClientData() {
+                return {
+                    nom: document.getElementById('nom').value.trim(),
+                    prenom: document.getElementById('prenom').value.trim(),
+                    cin: document.getElementById('cin').value.trim(),
+                    permis: document.getElementById('permis').value.trim(),
+                    datePermis: document.getElementById('datePermis').value,
+                    telephone: document.getElementById('telephone').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    adresse: document.getElementById('adresse').value.trim()
+                };
+            }
+
+            function validateClient() {
+                const data = getClientData();
+                for (let key in data) {
+                    if (!data[key]) return false;
+                }
+                return true;
+            }
+
+            function getDates() {
+                return {
+                    dateDebut: document.getElementById('dateDebut').value,
+                    dateFin: document.getElementById('dateFin').value
+                };
+            }
+
+            function validateDates() {
+                const { dateDebut, dateFin } = getDates();
+                if (!dateDebut || !dateFin) return false;
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                if (new Date(dateDebut) < today) return false;
+                if (new Date(dateDebut) >= new Date(dateFin)) return false;
+                return true;
+            }
+
+            function calculateTotal() {
+                const { dateDebut, dateFin } = getDates();
+                const days = Math.ceil((new Date(dateFin) - new Date(dateDebut)) / (1000 * 60 * 60 * 24));
+                let total = days * car.prix_par_jour;
+                if (assuranceChosen) total += days * assurancePrice;
+                return { days, total };
+            }
+
+            function showConfirmation() {
+                const client = getClientData();
+                const { dateDebut, dateFin } = getDates();
+                const { days, total } = calculateTotal();
+                const caution = Math.floor(car.prix_par_jour * 1.5) + 100;
+                const container = document.getElementById('confirmationContent');
+                container.innerHTML = `
+                    <div class="confirmation-grid">
+                        <div class="confirmation-cell">
+                            <i class="ri-car-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Véhicule</span>
+                                <span class="cell-value">${car.marque} ${car.modele}</span>
+                            </div>
+                        </div>
+                        <div class="confirmation-cell">
+                            <i class="ri-user-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Client</span>
+                                <span class="cell-value">${client.prenom} ${client.nom}</span>
+                            </div>
+                        </div>
+                        <div class="confirmation-cell">
+                            <i class="ri-bank-card-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">CIN</span>
+                                <span class="cell-value">${client.cin}</span>
+                            </div>
+                        </div>
+                        <div class="confirmation-cell">
+                            <i class="ri-drivers-license-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Permis</span>
+                                <span class="cell-value">${client.permis}</span>
+                            </div>
+                        </div>
+                        <div class="confirmation-cell">
+                            <i class="ri-mail-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Email</span>
+                                <span class="cell-value">${client.email}</span>
+                            </div>
+                        </div>
+                        <div class="confirmation-cell">
+                            <i class="ri-phone-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Téléphone</span>
+                                <span class="cell-value">${client.telephone}</span>
+                            </div>
+                        </div>
+                        <div class="confirmation-cell">
+                            <i class="ri-map-pin-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Adresse</span>
+                                <span class="cell-value">${client.adresse}</span>
+                            </div>
+                        </div>
+                        <div class="confirmation-cell">
+                            <i class="ri-calendar-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Période</span>
+                                <span class="cell-value">${dateDebut} → ${dateFin}</span>
+                            </div>
+                        </div>
+                        <div class="confirmation-cell">
+                            <i class="ri-time-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Durée</span>
+                                <span class="cell-value">${days} jour${days > 1 ? 's' : ''}</span>
+                            </div>
+                        </div>
+                        <div class="confirmation-cell">
+                            <i class="ri-money-euro-circle-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Prix / jour</span>
+                                <span class="cell-value">${car.prix_par_jour} DH</span>
+                            </div>
+                        </div>
+                        ${assuranceChosen ? `
+                        <div class="confirmation-cell">
+                            <i class="ri-shield-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Assurance / jour</span>
+                                <span class="cell-value">${assurancePrice} DH</span>
+                            </div>
+                        </div>
+                        ` : ''}
+                        <div class="confirmation-cell">
+                            <i class="ri-lock-line"></i>
+                            <div class="cell-content">
+                                <span class="cell-label">Caution</span>
+                                <span class="cell-value">${caution} – ${caution + 500} DH</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="confirmation-total">
+                        <span class="confirmation-total-label">Montant total</span>
+                        <span class="confirmation-total-value">${total} DH</span>
+                    </div>
+                `;
+            }
+
+            // Navigation
+            document.getElementById('toStep2').addEventListener('click', () => {
+                if (!validateClient()) {
+                    alert("Veuillez remplir tous les champs obligatoires.");
+                    return;
+                }
+                showStep(2);
+            });
+            document.getElementById('backToStep1').addEventListener('click', () => showStep(1));
+            document.getElementById('toStep3').addEventListener('click', () => {
+                if (!validateDates()) {
+                    alert("Veuillez sélectionner des dates valides (fin après début, date début non passée).");
+                    return;
+                }
+                const { dateDebut, dateFin } = getDates();
+                if (!isCarAvailable(car.id, dateDebut, dateFin)) {
+                    alert("Désolé, ce véhicule n'est pas disponible pour les dates sélectionnées. Veuillez modifier vos dates ou choisir un autre véhicule.");
+                    return;
+                }
+                showConfirmation();
+                showStep(3);
+            });
+            document.getElementById('backToStep2').addEventListener('click', () => showStep(2));
+
+            // Confirmation finale et sauvegarde
+            document.getElementById('confirmReservation').addEventListener('click', () => {
+                const client = getClientData();
+                const { dateDebut, dateFin } = getDates();
+                const { days, total } = calculateTotal();
+                const caution = Math.floor(car.prix_par_jour * 1.5) + 100;
+
+                if (!isCarAvailable(car.id, dateDebut, dateFin)) {
+                    alert("Désolé, ce véhicule n'est plus disponible pour ces dates. La réservation ne peut pas être créée.");
+                    return;
+                }
+
+                showLoading();
+                setTimeout(() => {
+                    const reservationData = {
+                        id: 'RES-' + Date.now(),
+                        clientId: currentClient.id,
+                        client: client,
+                        voitureId: car.id,
+                        voitureNom: `${car.marque} ${car.modele}`,
+                        dateDebut: dateDebut,
+                        dateFin: dateFin,
+                        assuranceIncluse: assuranceChosen,
+                        prixParJourApplique: car.prix_par_jour,
+                        prixAssuranceApplique: assuranceChosen ? assurancePrice : null,
+                        montantTotal: total,
+                        caution: caution,
+                        statut: "Confirmée",
+                        dateReservation: new Date().toISOString()
+                    };
+
+                    let reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+                    reservations.push(reservationData);
+                    localStorage.setItem('reservations', JSON.stringify(reservations));
+
+                    hideLoading();
+                    alert(`<i class="ri-checkbox-circle-line"></i> Réservation confirmée ! Montant total : ${total} DH.\nVous pouvez maintenant créer votre contrat depuis "Mes réservations".`);
+                    window.location.href = "mes-reservations.html";
+                }, 1000);
+            });
+
+            // Calendrier icon picker
+            document.querySelectorAll('.calendar-icon').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const input = document.getElementById(targetId);
+                    if (input && input.showPicker) {
+                        input.showPicker();
+                    } else {
+                        input.focus();
+                    }
+                });
+            });
+
+            showStep(1);
+        });
+    </script>
+</body>
+</html>

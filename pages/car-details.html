@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAHYA Mobility - Détails du véhicule</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .page-content {
+            padding-top: calc(var(--header-height) + var(--space-2xl));
+            padding-bottom: var(--space-3xl);
+            min-height: 100vh;
+        }
+
+
+
+        .details-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .car-image-section {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(59,130,246,0.05) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-2xl);
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .car-image-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(59,130,246,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .car-image-section img {
+            width: 100%;
+            max-width: 420px;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.5s var(--ease);
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+        }
+
+        .car-image-section:hover img {
+            transform: scale(1.05);
+        }
+
+        .car-info-section {
+            padding: var(--space-2xl);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .car-header {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .car-header h1 {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+        }
+
+        .car-price-tag {
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-sm);
+        }
+
+        .car-price-tag .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: var(--font-heading);
+            letter-spacing: -0.02em;
+        }
+
+        .car-price-tag .period {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .car-specs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-sm);
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            transition: border-color 0.2s var(--ease);
+        }
+
+        .spec-item:hover {
+            border-color: var(--border-accent);
+        }
+
+        .spec-item i {
+            color: var(--accent);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .features-section h3 {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .features-section h3 i {
+            color: var(--accent);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding: 8px 0;
+        }
+
+        .feature-item i {
+            color: var(--green);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .pricing-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+        }
+
+        .pricing-box .pricing-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 0.92rem;
+        }
+
+        .pricing-box .pricing-row:not(:last-child) {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .pricing-box .pricing-row .label {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .pricing-box .pricing-row .label i {
+            color: var(--accent);
+        }
+
+        .pricing-box .pricing-row .value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .assurance-check {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            cursor: pointer;
+            padding: 10px 0;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            transition: color 0.2s var(--ease);
+        }
+
+        .assurance-check:hover {
+            color: var(--text-primary);
+        }
+
+        .assurance-check input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--green);
+            flex-shrink: 0;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: var(--space-md);
+            margin-top: var(--space-sm);
+            border-top: 2px solid var(--border-accent);
+        }
+
+        .total-row .total-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .total-row .total-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: var(--font-heading);
+        }
+
+        .total-row .total-price small {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+
+
+        .not-found {
+            text-align: center;
+            padding: var(--space-4xl) var(--space-xl);
+        }
+
+        .not-found i {
+            font-size: 4rem;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: var(--space-lg);
+            opacity: 0.5;
+        }
+
+        .not-found p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .not-found a {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .site-footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: var(--space-3xl) var(--space-xl) var(--space-xl);
+            margin-top: var(--space-3xl);
+        }
+
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(2, 1fr);
+            gap: var(--space-3xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .footer-brand .footer-logo {
+            height: 48px;
+            width: auto;
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-col a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s var(--ease);
+        }
+
+        .footer-col a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .footer-socials a {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.2s var(--ease);
+            font-size: 1.1rem;
+        }
+
+        .footer-socials a:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .details-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .car-image-section {
+                min-height: 280px;
+            }
+
+            .car-specs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .car-info-section {
+                padding: var(--space-lg);
+            }
+
+            .car-header h1 {
+                font-size: 1.4rem;
+            }
+
+            .car-price-tag .price {
+                font-size: 1.6rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .car-specs {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav">
+            <a class="logo" href="accueil.html"><img src="../assets/images/logo.png" alt="YAHYA Mobility" class="logo-img"></a>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="accueil.html">Accueil</a>
+                <a href="cars.html">Véhicules</a>
+                <a href="mes-reservations.html">Mes réservations</a>
+                <a href="mes-contrats.html">Mes contrats</a>
+                <a href="profil.html">Profil</a>
+                <a href="about.html">À propos</a>
+                <span id="userMenu"></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="container">
+            <button class="btn-back" onclick="history.back()">
+                <i class="ri-arrow-left-line"></i> Retour
+            </button>
+            <div id="detailsContainer">
+                <div style="text-align:center; padding:4rem; color:var(--text-secondary);">
+                    <i class="ri-loader-4-line" style="font-size:2rem; animation:spin 1s linear infinite; display:block; margin-bottom:1rem; color:var(--accent);"></i>
+                    Chargement des détails...
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="../assets/images/logo.png" alt="YAHYA Mobility" class="footer-logo">
+                    <p>Votre partenaire de confiance pour la location de véhicules au Maroc. Qualité, sécurité et confort à chaque trajet.</p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Facebook"><i class="ri-facebook-fill"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="ri-linkedin-fill"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="accueil.html">Accueil</a></li>
+                        <li><a href="cars.html">Véhicules</a></li>
+                        <li><a href="mes-reservations.html">Mes réservations</a></li>
+                        <li><a href="about.html">À propos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="tel:+212600000000"><i class="ri-phone-line"></i> +212 6 00 00 00 00</a></li>
+                        <li><a href="mailto:contact@yahyamobility.ma"><i class="ri-mail-line"></i> contact@yahyamobility.ma</a></li>
+                        <li><a href="#"><i class="ri-map-pin-line"></i> Casablanca, Maroc</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 YAHYA Mobility. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/cars.js"></script>
+    <script src="../assets/js/3d-effects.js"></script>
+    <script>
+        function updateUserInterface() {
+            const currentUser = getCurrentClient();
+            const userMenu = document.getElementById('userMenu');
+            if (!userMenu) return;
+            if (currentUser) {
+                userMenu.innerHTML = `<span style="margin-right:15px;color:#3b82f6;">${currentUser.prenom} ${currentUser.nom}</span><button id="logoutBtn" style="background:none;border:1px solid var(--border-accent);color:white;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:0.85rem;">Déconnexion</button>`;
+                document.getElementById('logoutBtn')?.addEventListener('click', () => { localStorage.removeItem('currentClient'); window.location.href = "login.html"; });
+            } else {
+                userMenu.innerHTML = `<a href="login.html" class="btn-auth">Se connecter</a>`;
+                const protectedLinks = ['mes-reservations.html', 'mes-contrats.html', 'profil.html'];
+                document.querySelectorAll('.nav-links a').forEach(link => { const href = link.getAttribute('href'); if (protectedLinks.includes(href)) link.style.display = 'none'; });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentClient = getCurrentClient();
+            if (!currentClient) { alert("Veuillez vous connecter pour réserver."); window.location.href = "login.html"; return; }
+            updateUserInterface();
+            if (typeof hideCurrentPageLink === 'function') hideCurrentPageLink();
+
+            // Mobile nav
+            const navToggle = document.getElementById('navToggle');
+            const navLinks = document.getElementById('navLinks');
+            if (navToggle && navLinks) {
+                navToggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    navLinks.classList.toggle('open');
+                });
+            }
+
+            // Header scroll
+            window.addEventListener('scroll', () => {
+                const header = document.querySelector('.header');
+                if (header) {
+                    if (window.scrollY > 50) header.classList.add('scrolled');
+                    else header.classList.remove('scrolled');
+                }
+            });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const carId = parseInt(urlParams.get('id'));
+            const allCars = typeof cars !== 'undefined' ? cars : [];
+            const car = allCars.find(c => c.id === carId);
+            const container = document.getElementById('detailsContainer');
+
+            if (!car) {
+                container.innerHTML = `
+                    <div class="not-found">
+                        <i class="ri-error-warning-line"></i>
+                        <p>Véhicule non trouvé.</p>
+                        <a href="cars.html"><i class="ri-arrow-left-line"></i> Retour à la liste</a>
+                    </div>`;
+                return;
+            }
+
+            const annee = car.annee || (2020 + Math.floor(Math.random() * 4));
+            const couleur = car.couleur || ["Rouge", "Noire", "Blanche", "Bleue", "Grise"][Math.floor(Math.random() * 5)];
+            const km = car.kilometrage || (Math.random() * 50000 + 20000).toFixed(0);
+            const caution = Math.floor(car.prix_par_jour * 1.5) + 100;
+            const assurancePrice = 45;
+            let totalPerDay = car.prix_par_jour;
+
+            container.innerHTML = `
+                <div class="details-wrapper">
+                    <div class="car-image-section">
+                        <img src="${car.img}" alt="${car.marque} ${car.modele}">
+                    </div>
+                    <div class="car-info-section">
+                        <div class="car-header">
+                            <h1>${car.marque} ${car.modele}</h1>
+                            <div class="car-price-tag">
+                                <span class="price">${car.prix_par_jour} DH</span>
+                                <span class="period">/ jour</span>
+                            </div>
+                        </div>
+
+                        <div class="car-specs">
+                            <div class="spec-item"><i class="ri-calendar-line"></i> Année ${annee}</div>
+                            <div class="spec-item"><i class="ri-palette-line"></i> ${couleur}</div>
+                            <div class="spec-item"><i class="ri-flashlight-line"></i> ${car.carburant}</div>
+                            <div class="spec-item"><i class="ri-settings-3-line"></i> ${car.boite}</div>
+                            <div class="spec-item"><i class="ri-road-map-line"></i> ${km} km</div>
+                            <div class="spec-item"><i class="ri-checkbox-circle-line"></i> ${car.statut}</div>
+                        </div>
+
+                        <div class="features-section">
+                            <h3><i class="ri-star-line"></i> Caractéristiques</h3>
+                            <div class="features-grid">
+                                <div class="feature-item"><i class="ri-checkbox-circle-fill"></i> Assurance tous risques disponible</div>
+                                <div class="feature-item"><i class="ri-checkbox-circle-fill"></i> Véhicule régulièrement entretenu</div>
+                                <div class="feature-item"><i class="ri-checkbox-circle-fill"></i> Assistance 24/7</div>
+                                <div class="feature-item"><i class="ri-checkbox-circle-fill"></i> Kilométrage illimité</div>
+                            </div>
+                        </div>
+
+                        <div class="pricing-box">
+                            <div class="pricing-row">
+                                <span class="label"><i class="ri-shield-line"></i> Caution</span>
+                                <span class="value">${caution} - ${caution + 500} DH</span>
+                            </div>
+                            <label class="assurance-check">
+                                <input type="checkbox" id="assuranceCheck">
+                                <span>Assurance / jour : ${assurancePrice} DH</span>
+                            </label>
+                            <div class="total-row">
+                                <span class="total-label">Total</span>
+                                <span class="total-price" id="totalPriceDisplay">${car.prix_par_jour} DH <small>/ jour</small></span>
+                            </div>
+                        </div>
+
+                        <button class="btn-reserve" data-id="${car.id}">
+                            <i class="ri-checkbox-circle-line"></i> Réserver maintenant
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            const assuranceCheck = document.getElementById('assuranceCheck');
+            const totalSpan = document.getElementById('totalPriceDisplay');
+            if (assuranceCheck) {
+                assuranceCheck.addEventListener('change', function() {
+                    totalPerDay = this.checked ? car.prix_par_jour + assurancePrice : car.prix_par_jour;
+                    totalSpan.innerHTML = `${totalPerDay} DH <small>/ jour ${this.checked ? '(avec assurance)' : ''}</small>`;
+                });
+            }
+
+            const reserveBtn = document.querySelector('.btn-reserve');
+            if (reserveBtn) {
+                reserveBtn.addEventListener('click', function() {
+                    const assuranceChosen = assuranceCheck ? assuranceCheck.checked : false;
+                    localStorage.setItem('selectedCarId', car.id);
+                    localStorage.setItem('assuranceChosen', assuranceChosen);
+                    localStorage.setItem('assurancePrice', assurancePrice);
+                    window.location.href = 'reservation.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

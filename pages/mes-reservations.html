@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAHYA Mobility - Mes reservations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .page-section {
+            padding: 8rem 0 4rem;
+        }
+
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .page-title i {
+            color: var(--accent);
+            margin-right: var(--space-sm);
+        }
+
+        .reservations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .reservation-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            border: 1px solid var(--border);
+            transition: transform var(--duration-slow) var(--ease), box-shadow var(--duration-slow) var(--ease), border-color var(--duration-slow) var(--ease);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .reservation-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+
+        .reservation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: var(--space-sm);
+        }
+
+        .reservation-id {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 0.95rem;
+        }
+
+        .reservation-status {
+            padding: 0.2rem 0.65rem;
+            border-radius: var(--radius-full);
+            font-size: 0.72rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.12);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+
+        .status-confirmed {
+            background: rgba(16, 185, 129, 0.12);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .status-transformed {
+            background: rgba(59, 130, 246, 0.12);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+
+        .reservation-info p {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+        }
+
+        .reservation-info i {
+            color: var(--accent);
+            width: 22px;
+            flex-shrink: 0;
+        }
+
+        .card-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .card-buttons button {
+            flex: 1;
+            padding: 0.55rem 0.8rem;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.82rem;
+            transition: all var(--duration) var(--ease);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+        }
+
+
+
+        .empty-message {
+            text-align: center;
+            padding: var(--space-3xl);
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            border: 2px dashed var(--border);
+        }
+
+        .empty-message i {
+            font-size: 3rem;
+            color: var(--gold);
+            opacity: 0.5;
+        }
+
+        .empty-message p {
+            margin: var(--space-md) 0;
+            color: var(--text-secondary);
+        }
+
+
+
+        /* Modal overrides */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-xl);
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            max-width: 520px;
+            width: 100%;
+            padding: var(--space-2xl);
+            border: 1px solid var(--border-accent);
+            position: relative;
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: var(--space-md);
+            right: var(--space-lg);
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color var(--duration) var(--ease);
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal h3 {
+            margin-bottom: var(--space-lg);
+            color: var(--accent);
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-group label i {
+            color: var(--accent);
+            margin-right: var(--space-xs);
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+
+
+        @media (max-width: 768px) {
+            .reservations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav">
+            <a class="logo" href="accueil.html">
+                <img src="../assets/images/logo.png" alt="YAHYA Mobility" class="logo-img">
+            </a>
+            <div class="nav-toggle" id="navToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="accueil.html">Accueil</a>
+                <a href="cars.html">Vehicules</a>
+                <a href="mes-reservations.html">Mes reservations</a>
+                <a href="mes-contrats.html">Mes contrats</a>
+                <a href="profil.html">Profil</a>
+                <a href="about.html">A propos</a>
+                <span id="userMenu"></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-section">
+        <div class="container">
+            <h1 class="page-title"><i class="ri-file-list-line"></i> Mes reservations</h1>
+            <div id="reservationsContainer">
+                <div style="text-align:center;color:var(--text-muted);">Chargement...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal pour saisir les informations complementaires du contrat -->
+    <div id="contractModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModal">&times;</span>
+            <h3><i class="ri-file-add-line"></i> Creer un contrat</h3>
+            <form id="contractForm">
+                <div class="form-group">
+                    <label><i class="ri-map-pin-line"></i> Lieu de livraison *</label>
+                    <select id="lieuLivraison" required>
+                        <option value="">Choisir un lieu...</option>
+                        <option value="Agence Tetouan">Agence Tetouan</option>
+                        <option value="Aeroport Tetouan">Aeroport Tetouan - Saniat R'mel</option>
+                        <option value="Agence Casablanca">Agence Casablanca</option>
+                        <option value="Aeroport Casablanca">Aeroport Casablanca - Mohammed V</option>
+                        <option value="Agence Tanger">Agence Tanger</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="ri-map-pin-line"></i> Lieu de reprise *</label>
+                    <select id="lieuReprise" required>
+                        <option value="">Choisir un lieu...</option>
+                        <option value="Agence Tetouan">Agence Tetouan</option>
+                        <option value="Aeroport Tetouan">Aeroport Tetouan - Saniat R'mel</option>
+                        <option value="Agence Casablanca">Agence Casablanca</option>
+                        <option value="Aeroport Casablanca">Aeroport Casablanca - Mohammed V</option>
+                        <option value="Agence Tanger">Agence Tanger</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="ri-time-line"></i> Heure de depart *</label>
+                    <input type="time" id="heureDebut" required value="09:00">
+                </div>
+                <div class="form-group">
+                    <label><i class="ri-time-line"></i> Heure de retour *</label>
+                    <input type="time" id="heureFin" required value="18:00">
+                </div>
+                <div class="form-group">
+                    <label><i class="ri-speed-line"></i> Kilometrage depart *</label>
+                    <input type="number" id="kmDepart" required step="1" min="0" placeholder="Ex: 15230">
+                </div>
+                <div class="form-group">
+                    <label><i class="ri-edit-line"></i> Observations (etat du vehicule, carburant, etc.)</label>
+                    <textarea id="observations" rows="3" placeholder="Ex: Vehicule propre, pas de rayures, carburant plein..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit"><i class="ri-checkbox-circle-line"></i> Confirmer la creation du contrat</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p style="color:var(--text-muted);">&copy; 2026 YAHYA Mobility - Location de voitures</p>
+        </div>
+    </footer>
+
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('open');
+            });
+        });
+    </script>
+
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script>
+        // ==== Fonctions utilitaires (auth, interface) ====
+        function updateUserInterface() {
+            const currentUser = getCurrentClient();
+            const userMenu = document.getElementById('userMenu');
+            if (!userMenu) return;
+            if (currentUser) {
+                userMenu.innerHTML = `
+                    <span style="margin-right: 15px; color:var(--accent);">${currentUser.prenom} ${currentUser.nom}</span>
+                    <button id="logoutBtn" class="btn btn-outline" style="padding:0.45rem 1.2rem;font-size:0.88rem;">Deconnexion</button>
+                `;
+                document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                    localStorage.removeItem('currentClient');
+                    window.location.href = "login.html";
+                });
+            } else {
+                userMenu.innerHTML = `<a href="login.html" class="btn btn-auth">Se connecter</a>`;
+                const protectedLinks = ['mes-reservations.html', 'mes-contrats.html', 'profil.html'];
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (protectedLinks.includes(href)) link.style.display = 'none';
+                });
+            }
+        }
+
+        // Verification de disponibilite pour un contrat (même logique)
+        function isCarAvailableForContract(carId, startDate, endDate, excludeReservationId) {
+            const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+            const contrats = JSON.parse(localStorage.getItem('contrats') || '[]');
+
+            const conflictingReservation = reservations.some(res => {
+                if (res.voitureId != carId) return false;
+                if (res.id === excludeReservationId) return false;
+                if (res.statut === 'Annulee' || res.statut === 'Expiree') return false;
+                const resStart = new Date(res.dateDebut);
+                const resEnd = new Date(res.dateFin);
+                const reqStart = new Date(startDate);
+                const reqEnd = new Date(endDate);
+                return (reqStart < resEnd && reqEnd > resStart);
+            });
+            if (conflictingReservation) return false;
+
+            const conflictingContrat = contrats.some(ctr => {
+                if (ctr.ID_voiture != carId) return false;
+                if (ctr.Statut !== 'En cours') return false;
+                const ctrStart = new Date(ctr.Date_debut_effective);
+                const ctrEnd = new Date(ctr.Date_fin_effective);
+                return (new Date(startDate) < ctrEnd && new Date(endDate) > ctrStart);
+            });
+            return !conflictingContrat;
+        }
+
+        // Fonction pour creer le contrat avec les donnees du modal
+        function createFullContract(reservation, formData) {
+            const {
+                lieuLivraison,
+                lieuReprise,
+                heureDebut,
+                heureFin,
+                kmDepart,
+                observations
+            } = formData;
+
+            const currentUser = getCurrentClient();
+            const voiture = getCars().find(c => c.id == reservation.voitureId);
+            if (!voiture) throw new Error("Vehicule non trouve");
+
+            const days = Math.ceil((new Date(reservation.dateFin) - new Date(reservation.dateDebut)) / (1000*60*60*24));
+            const montantBase = days * reservation.prixParJourApplique;
+            const montantAssurance = reservation.assuranceIncluse ? days * (reservation.prixAssuranceApplique || 45) : 0;
+            const montantTotal = montantBase + montantAssurance;
+            const caution = Math.floor(reservation.prixParJourApplique * 1.5) + 100;
+
+            const contratId = 'CTR-' + Date.now();
+            const newContrat = {
+                ID_contrat: contratId,
+                ID_client: currentUser.id,
+                ID_voiture: reservation.voitureId,
+                ID_reservation: reservation.id,
+                Date_debut_effective: reservation.dateDebut,
+                Date_fin_effective: reservation.dateFin,
+                Date_retour_reelle: null,
+                Date_signature: new Date().toISOString(),
+                Kilometrage_depart: kmDepart,
+                Kilometrage_retour: null,
+                Prix_par_jour_applique: reservation.prixParJourApplique,
+                Assurance_incluse: reservation.assuranceIncluse,
+                Prix_assurance_applique: reservation.assuranceIncluse ? (reservation.prixAssuranceApplique || 45) : null,
+                Montant_total: montantTotal,
+                Caution: caution,
+                Statut_caution: "Non restituee",
+                Statut: "En cours",
+                Lieu_livraison: lieuLivraison,
+                Lieu_reprise: lieuReprise,
+                Heure_debut: heureDebut,
+                Heure_fin: heureFin,
+                Observations: observations || "",
+                Franchise: "5000 DH",
+                Assurance_tous_risques: "Oui",
+                Agent_nom: `${currentUser.prenom} ${currentUser.nom}`,
+                Montant_paye: 0,
+                Reste_a_payer: montantTotal,
+                Cg_checked: "checked",
+                Assurance_checked: "checked",
+                Autorisation_checked: "checked",
+                Vignette_checked: "checked",
+                Visite_technique_checked: "checked",
+                Espece_checked: "",
+                Carte_checked: "",
+                Virement_checked: "",
+                Cheque_checked: ""
+            };
+
+            // Sauvegarder le contrat
+            let contrats = JSON.parse(localStorage.getItem('contrats') || '[]');
+            contrats.push(newContrat);
+            localStorage.setItem('contrats', JSON.stringify(contrats));
+
+            // Mettre a jour la reservation
+            let reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+            const resIndex = reservations.findIndex(r => r.id === reservation.id);
+            if (resIndex !== -1) {
+                reservations[resIndex].statut = "Transformee en contrat";
+                reservations[resIndex].ID_contrat = contratId;
+                localStorage.setItem('reservations', JSON.stringify(reservations));
+            }
+
+            // Mettre a jour le statut de la voiture
+            let allCars = JSON.parse(localStorage.getItem('cars') || JSON.stringify(cars));
+            const carIndex = allCars.findIndex(c => c.id == reservation.voitureId);
+            if (carIndex !== -1) {
+                allCars[carIndex].statut = "En location";
+                localStorage.setItem('cars', JSON.stringify(allCars));
+                syncCars();
+                if (typeof window.cars !== 'undefined') window.cars = allCars;
+            }
+
+            alert(`Contrat ${contratId} cree avec succes ! Le vehicule est maintenant marque "En location".`);
+            return contratId;
+        }
+
+        // Chargement des reservations
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentClient = getCurrentClient();
+            if (!currentClient) {
+                alert("Veuillez vous connecter pour voir vos reservations.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            updateUserInterface();
+            if (typeof hideCurrentPageLink === 'function') hideCurrentPageLink();
+
+            function loadReservations() {
+                let allReservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+                const myReservations = allReservations.filter(res => res.clientId === currentClient.id);
+                const container = document.getElementById('reservationsContainer');
+
+                if (myReservations.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-message">
+                            <i class="ri-information-line"></i>
+                            <p>Vous n'avez effectue aucune reservation pour le moment.</p>
+                            <button class="btn-home" id="goHomeBtn"><i class="ri-home-line"></i> Retour a l'accueil</button>
+                        </div>
+                    `;
+                    document.getElementById('goHomeBtn')?.addEventListener('click', () => window.location.href = "accueil.html");
+                    return;
+                }
+
+                let html = `<div class="reservations-grid">`;
+                myReservations.forEach(res => {
+                    let statusClass = '';
+                    let statusText = '';
+                    if (res.statut === 'En attente') {
+                        statusClass = 'status-pending';
+                        statusText = '<i class="ri-time-line"></i> En attente';
+                    } else if (res.statut === 'Confirmee') {
+                        statusClass = 'status-confirmed';
+                        statusText = '<i class="ri-checkbox-circle-line"></i> Confirmee';
+                    } else if (res.statut === 'Transformee en contrat') {
+                        statusClass = 'status-transformed';
+                        statusText = '<i class="ri-file-copy-line"></i> Transformee en contrat';
+                    } else {
+                        statusClass = 'status-pending';
+                        statusText = res.statut;
+                    }
+                    const voitureNom = res.voitureNom || (res.voiture ? `${res.voiture.marque} ${res.voiture.modele}` : 'Voiture');
+                    html += `
+                        <div class="reservation-card" data-res-id="${res.id}">
+                            <div class="reservation-header">
+                                <span class="reservation-id">${res.id}</span>
+                                <span class="reservation-status ${statusClass}">${statusText}</span>
+                            </div>
+                            <div class="reservation-info">
+                                <p><i class="ri-car-line"></i> ${voitureNom}</p>
+                                <p><i class="ri-calendar-line"></i> Du ${res.dateDebut} au ${res.dateFin}</p>
+                                <p><i class="ri-money-euro-circle-line"></i> Montant total : ${res.montantTotal} DH</p>
+                                ${res.assuranceIncluse ? `<p><i class="ri-shield-line"></i> Assurance incluse (+${res.prixAssuranceApplique} DH/jour)</p>` : ''}
+                                <p><i class="ri-calendar-check-line"></i> Reserve le : ${new Date(res.dateReservation).toLocaleDateString()}</p>
+                            </div>
+                            <div class="card-buttons">
+                                <button class="btn-details" data-id="${res.id}"><i class="ri-search-line"></i> Details</button>
+                                <button class="btn-delete" data-id="${res.id}"><i class="ri-delete-bin-line"></i> Supprimer</button>
+                                ${res.statut === 'Confirmee' ? `<button class="btn-create-contract" data-id="${res.id}" data-voiture-id="${res.voitureId}" data-debut="${res.dateDebut}" data-fin="${res.dateFin}" data-assurance="${res.assuranceIncluse}" data-prix="${res.prixParJourApplique}" data-assurance-prix="${res.prixAssuranceApplique || 0}"><i class="ri-file-copy-line"></i> Creer contrat</button>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                container.innerHTML = html;
+
+                // Details
+                document.querySelectorAll('.btn-details').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = btn.getAttribute('data-id');
+                        const reservation = myReservations.find(r => r.id === id);
+                        if (reservation) showDetails(reservation);
+                    });
+                });
+
+                // Supprimer (uniquement si non confirmee ou non transformee)
+                document.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = btn.getAttribute('data-id');
+                        const reservation = myReservations.find(r => r.id === id);
+                        if (!reservation) return;
+                        if (reservation.statut === 'Confirmee' || reservation.statut === 'Transformee en contrat') {
+                            alert("Impossible de supprimer une reservation confirmee ou deja transformee en contrat.");
+                            return;
+                        }
+                        if (await showConfirm("Etes-vous sur de vouloir supprimer cette reservation ?")) {
+                            showLoading();
+                            setTimeout(() => {
+                                let updatedReservations = allReservations.filter(r => r.id !== id);
+                                localStorage.setItem('reservations', JSON.stringify(updatedReservations));
+                                loadReservations();
+                                hideLoading();
+                                alert("Reservation supprimee avec succes.");
+                            }, 500);
+                        }
+                    });
+                });
+
+                // Creer contrat - OUVRE LE MODAL
+                document.querySelectorAll('.btn-create-contract').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const reservationId = btn.getAttribute('data-id');
+                        const reservation = myReservations.find(r => r.id === reservationId);
+                        if (!reservation) return;
+
+                        // Verifier disponibilite avant d'ouvrir le modal (optionnel mais bien)
+                        const voitureId = parseInt(btn.getAttribute('data-voiture-id'));
+                        const dateDebut = btn.getAttribute('data-debut');
+                        const dateFin = btn.getAttribute('data-fin');
+                        if (!isCarAvailableForContract(voitureId, dateDebut, dateFin, reservationId)) {
+                            alert("Ce vehicule n'est plus disponible pour ces dates. Vous ne pouvez pas creer de contrat.");
+                            return;
+                        }
+
+                        // Stocker temporairement l'ID de la reservation pour l'utiliser dans le submit du modal
+                        window.currentReservationForContract = reservation;
+                        window.currentReservationId = reservationId;
+                        window.currentCarId = voitureId;
+                        window.currentStartDate = dateDebut;
+                        window.currentEndDate = dateFin;
+
+                        // Vider et afficher le modal
+                        document.getElementById('contractForm').reset();
+                        // Valeurs par defaut
+                        document.getElementById('heureDebut').value = '09:00';
+                        document.getElementById('heureFin').value = '18:00';
+                        document.getElementById('lieuLivraison').value = '';
+                        document.getElementById('lieuReprise').value = '';
+                        document.getElementById('kmDepart').value = '';
+                        document.getElementById('observations').value = '';
+                        document.getElementById('contractModal').style.display = 'flex';
+                    });
+                });
+            }
+            // Affichage des details d'une reservation (modal simple)
+            function showDetails(reservation) {
+                const modal = document.getElementById('detailsModal');
+                const modalBody = document.getElementById('modalBody');
+                const voitureNom = reservation.voitureNom || (reservation.voiture ? `${reservation.voiture.marque} ${reservation.voiture.modele}` : 'Voiture');
+                modalBody.innerHTML = `
+                    <p><strong>ID reservation :</strong> ${reservation.id}</p>
+                    <p><strong>Vehicule :</strong> ${voitureNom}</p>
+                    <p><strong>Dates :</strong> du ${reservation.dateDebut} au ${reservation.dateFin}</p>
+                    <p><strong>Nombre de jours :</strong> ${Math.ceil((new Date(reservation.dateFin) - new Date(reservation.dateDebut)) / (1000*60*60*24))}</p>
+                    <p><strong>Prix / jour :</strong> ${reservation.prixParJourApplique} DH</p>
+                    <p><strong>Assurance :</strong> ${reservation.assuranceIncluse ? `Oui (+${reservation.prixAssuranceApplique} DH/jour)` : 'Non'}</p>
+                    <p><strong>Montant total :</strong> ${reservation.montantTotal} DH</p>
+                    <p><strong>Statut :</strong> ${reservation.statut}</p>
+                    <p><strong>Date de reservation :</strong> ${new Date(reservation.dateReservation).toLocaleString()}</p>
+                `;
+                modal.style.display = 'flex';
+            }
+
+            // Gestion du modal de details (existant)
+            const detailsModal = document.createElement('div');
+            detailsModal.id = 'detailsModal';
+            detailsModal.className = 'modal';
+            detailsModal.innerHTML = `
+                <div class="modal-content">
+                    <span class="modal-close" id="closeDetailsModal">&times;</span>
+                    <h3 style="color:var(--accent); margin-bottom:var(--space-lg); font-family:var(--font-heading); display:flex; align-items:center; gap:var(--space-sm);"><i class="ri-file-list-line"></i> Details de la reservation</h3>
+                    <div id="modalBody" style="color:var(--text-secondary);"></div>
+                </div>
+            `;
+            document.body.appendChild(detailsModal);
+            const closeDetails = document.getElementById('closeDetailsModal');
+            if (closeDetails) closeDetails.onclick = () => detailsModal.style.display = 'none';
+            window.onclick = (event) => {
+                if (event.target === detailsModal) detailsModal.style.display = 'none';
+            };
+            window.detailsModal = detailsModal; // pour y acceder
+
+            // Gestion du modal de creation contrat
+            const contractModal = document.getElementById('contractModal');
+            const closeContractModal = document.getElementById('closeModal');
+            closeContractModal.onclick = () => contractModal.style.display = 'none';
+            window.onclick = (event) => {
+                if (event.target === contractModal) contractModal.style.display = 'none';
+            };
+
+            // Soumission du formulaire de contrat
+            document.getElementById('contractForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const reservation = window.currentReservationForContract;
+                if (!reservation) {
+                    alert("Erreur : reservation non trouvee.");
+                    contractModal.style.display = 'none';
+                    return;
+                }
+
+                // Recuperation des valeurs
+                const lieuLivraison = document.getElementById('lieuLivraison').value.trim();
+                const lieuReprise = document.getElementById('lieuReprise').value.trim();
+                const heureDebut = document.getElementById('heureDebut').value;
+                const heureFin = document.getElementById('heureFin').value;
+                const kmDepart = parseInt(document.getElementById('kmDepart').value);
+                const observations = document.getElementById('observations').value;
+
+                if (!lieuLivraison || !lieuReprise || !heureDebut || !heureFin || isNaN(kmDepart)) {
+                    alert("Veuillez remplir tous les champs obligatoires (lieux, heures, kilometrage).");
+                    return;
+                }
+
+                // Verifier a nouveau la disponibilite (au cas ou)
+                if (!isCarAvailableForContract(window.currentCarId, window.currentStartDate, window.currentEndDate, window.currentReservationId)) {
+                    alert("Ce vehicule n'est plus disponible pour ces dates. Impossible de creer le contrat.");
+                    contractModal.style.display = 'none';
+                    return;
+                }
+
+                // Creer le contrat avec les donnees
+                try {
+                    createFullContract(reservation, {
+                        lieuLivraison,
+                        lieuReprise,
+                        heureDebut,
+                        heureFin,
+                        kmDepart,
+                        observations
+                    });
+                    // Recharger la liste des reservations (pour mettre a jour le statut)
+                    loadReservations();
+                    contractModal.style.display = 'none';
+                } catch (err) {
+                    alert("Erreur lors de la creation du contrat : " + err.message);
+                }
+            });
+
+            loadReservations();
+        });
+    </script>
+</body>
+</html>

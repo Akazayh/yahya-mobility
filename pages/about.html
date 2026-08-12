@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAHYA Mobility - À propos de nous</title>
+    <meta name="description" content="Découvrez YAHYA Mobility, votre partenaire de confiance pour la location de voitures au Maroc. Notre mission, nos valeurs et notre innovation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        /* ── Hero About ── */
+        .hero-about {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: url('../assets/images/about_page.png') no-repeat center/cover;
+            background-attachment: fixed;
+            overflow: hidden;
+        }
+
+        .hero-about::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(6, 6, 17, 0.5) 0%,
+                rgba(6, 6, 17, 0.75) 50%,
+                var(--bg-primary) 100%
+            );
+            z-index: 1;
+        }
+
+        .hero-about::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 180px;
+            background: linear-gradient(to top, var(--bg-primary), transparent);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: var(--space-xl);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 0.45rem 1rem;
+            background: var(--accent-subtle);
+            border: 1px solid var(--border-accent);
+            border-radius: var(--radius-full);
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: var(--space-xl);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            animation: heroSlideIn 0.8s ease-out forwards;
+        }
+
+        .hero-content h1 .gradient-text {
+            background: linear-gradient(135deg, var(--accent), #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+            animation: heroSlideIn 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        @keyframes heroSlideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Mission Section ── */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-xl);
+            margin-top: var(--space-xl);
+        }
+
+        .mission-card {
+            background: var(--bg-card);
+            padding: var(--space-2xl);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: transform var(--duration-slow) var(--ease),
+                        box-shadow var(--duration-slow) var(--ease),
+                        border-color var(--duration-slow) var(--ease);
+        }
+
+        .mission-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            border-color: var(--border-accent);
+        }
+
+        .mission-card .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-lg);
+            background: var(--accent-subtle);
+            border: 1px solid var(--border-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            transition: background var(--duration) var(--ease),
+                        transform var(--duration) var(--ease);
+        }
+
+        .mission-card:hover .card-icon {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .mission-card .card-icon i {
+            font-size: 1.6rem;
+            color: var(--accent);
+            transition: color var(--duration) var(--ease);
+        }
+
+        .mission-card:hover .card-icon i {
+            color: white;
+        }
+
+        .mission-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: var(--space-md);
+            font-weight: 600;
+        }
+
+        .mission-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* ── Innovation Section ── */
+        .innovation-block {
+            background: var(--bg-card);
+            padding: var(--space-2xl);
+            border-radius: var(--radius-xl);
+            border-left: 4px solid var(--accent);
+            margin-bottom: var(--space-xl);
+            transition: transform var(--duration-slow) var(--ease),
+                        border-left-color var(--duration) var(--ease);
+        }
+
+        .innovation-block:hover {
+            transform: translateX(8px);
+            border-left-color: var(--green);
+        }
+
+        .innovation-block p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .innovation-block strong {
+            color: var(--text-primary);
+        }
+
+        /* ── Stats Section ── */
+        .stats-wrapper {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            padding: var(--space-3xl);
+            margin-top: var(--space-xl);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-xl);
+            text-align: center;
+        }
+
+        .stat-item {
+            position: relative;
+        }
+
+        .stat-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 10%;
+            height: 80%;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .stat-number {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 800;
+            color: var(--accent);
+            font-family: var(--font-heading);
+            transition: text-shadow var(--duration) var(--ease);
+        }
+
+        .stat-number:hover {
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            margin-top: var(--space-sm);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            background: var(--accent-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-md);
+        }
+
+        .stat-icon i {
+            font-size: 1.3rem;
+            color: var(--accent);
+        }
+
+        /* ── Offer Section ── */
+        .offer-card {
+            background: var(--bg-card);
+            padding: var(--space-2xl);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: transform var(--duration-slow) var(--ease),
+                        box-shadow var(--duration-slow) var(--ease),
+                        border-color var(--duration-slow) var(--ease);
+        }
+
+        .offer-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            border-color: var(--border-accent);
+        }
+
+        .offer-card .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-lg);
+            background: var(--accent-subtle);
+            border: 1px solid var(--border-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            transition: background var(--duration) var(--ease),
+                        transform var(--duration) var(--ease);
+        }
+
+        .offer-card:hover .card-icon {
+            background: var(--green);
+            border-color: var(--green);
+            transform: scale(1.1);
+        }
+
+        .offer-card .card-icon i {
+            font-size: 1.6rem;
+            color: var(--accent);
+            transition: color var(--duration) var(--ease);
+        }
+
+        .offer-card:hover .card-icon i {
+            color: white;
+        }
+
+        .offer-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .offer-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .mission-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-about {
+                min-height: 50vh;
+                background-attachment: scroll;
+            }
+
+            .mission-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-2xl);
+            }
+
+            .stat-item:not(:last-child)::after {
+                display: none;
+            }
+
+            .stats-wrapper {
+                padding: var(--space-2xl) var(--space-lg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="nav" aria-label="Navigation principale">
+            <a class="logo" href="../index.html">
+                <img src="../assets/images/logo.png" alt="YAHYA Mobility" class="logo-img">
+            </a>
+            <div class="nav-links" id="navLinks" role="navigation">
+                <a href="accueil.html">Accueil</a>
+                <a href="cars.html">Véhicules</a>
+                <a href="mes-reservations.html">Mes réservations</a>
+                <a href="mes-contrats.html">Mes contrats</a>
+                <a href="profil.html">Profil</a>
+                <a href="about.html">À propos</a>
+                <span id="userMenu">
+                    <a href="login.html" class="btn-auth btn-outline">Se connecter</a>
+                    <a href="register.html" class="btn-auth">S'inscrire</a>
+                </span>
+            </div>
+            <div class="nav-toggle" id="navToggle" aria-label="Menu" role="button" tabindex="0">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero-about">
+            <div class="hero-content">
+                <div class="hero-badge reveal">
+                    <i class="ri-information-line"></i>
+                    Notre histoire
+                </div>
+                <h1>
+                    À propos de<br>
+                    <span class="gradient-text">YAHYA Mobility</span>
+                </h1>
+                <p>Bienvenue sur notre plateforme de location de voitures, une solution moderne conçue pour simplifier et digitaliser l'ensemble du processus de location.</p>
+            </div>
+        </section>
+
+        <!-- Mission -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title reveal">Notre mission</h2>
+                <p class="section-subtitle reveal">Offrir une expérience fluide, rapide et fiable aussi bien pour les clients que pour les gestionnaires d'agences.</p>
+                <div class="mission-grid">
+                    <div class="mission-card reveal">
+                        <div class="card-icon">
+                            <i class="ri-flashlight-line"></i>
+                        </div>
+                        <h3>Simplicité</h3>
+                        <p>Réservez en quelques clics sans complexité administrative.</p>
+                    </div>
+                    <div class="mission-card reveal reveal-delay-1">
+                        <div class="card-icon">
+                            <i class="ri-speed-line"></i>
+                        </div>
+                        <h3>Rapidité</h3>
+                        <p>Traitement instantané des demandes et des contrats.</p>
+                    </div>
+                    <div class="mission-card reveal reveal-delay-2">
+                        <div class="card-icon">
+                            <i class="ri-shield-check-line"></i>
+                        </div>
+                        <h3>Fiabilité</h3>
+                        <p>Véhicules entretenus et service client 24/7.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Innovation -->
+        <section class="section" style="background: var(--bg-secondary);">
+            <div class="container">
+                <h2 class="section-title reveal">L'innovation au cœur de notre système</h2>
+                <div class="innovation-block reveal">
+                    <p>Grâce à notre système intelligent, nous facilitons la gestion des véhicules, des réservations et des clients, tout en réduisant les erreurs et les tâches administratives.</p>
+                </div>
+                <div class="innovation-block reveal reveal-delay-1">
+                    <p><strong>Le contrat informatisé</strong> – Fini les documents papier compliqués : désormais, la création, la gestion et le suivi des contrats se font de manière numérique, sécurisée et instantanée. Cela permet un gain de temps considérable, une meilleure organisation et une traçabilité optimale des opérations.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title reveal">Pourquoi nous choisir ?</h2>
+                <div class="stats-wrapper reveal">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="ri-car-line"></i>
+                            </div>
+                            <div class="stat-number" data-target="500" data-suffix="+">0</div>
+                            <p class="stat-label">Véhicules disponibles</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="ri-emotion-happy-line"></i>
+                            </div>
+                            <div class="stat-number" data-target="98" data-suffix="%">0</div>
+                            <p class="stat-label">Satisfaction client</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="ri-customer-service-line"></i>
+                            </div>
+                            <div class="stat-number" data-suffix="/7" data-target="24">0</div>
+                            <p class="stat-label">Assistance dédiée</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="ri-file-text-line"></i>
+                            </div>
+                            <div class="stat-number" data-target="100" data-suffix="%">0</div>
+                            <p class="stat-label">Contrats digitalisés</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What We Offer -->
+        <section class="section" style="background: var(--bg-secondary);">
+            <div class="container">
+                <h2 class="section-title reveal">Ce que nous offrons</h2>
+                <div class="mission-grid">
+                    <div class="offer-card reveal">
+                        <div class="card-icon">
+                            <i class="ri-eye-line"></i>
+                        </div>
+                        <h3>Transparence totale</h3>
+                        <p>Suivez vos locations en temps réel et sans surprises.</p>
+                    </div>
+                    <div class="offer-card reveal reveal-delay-1">
+                        <div class="card-icon">
+                            <i class="ri-bar-chart-line"></i>
+                        </div>
+                        <h3>Outils puissants pour administrateurs</h3>
+                        <p>Gérez efficacement votre activité au quotidien.</p>
+                    </div>
+                    <div class="offer-card reveal reveal-delay-2">
+                        <div class="card-icon">
+                            <i class="ri-cloud-line"></i>
+                        </div>
+                        <h3>Transformation digitale</h3>
+                        <p>Une solution simple, performante et adaptée aux besoins actuels du marché.</p>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="accueil.html" class="btn btn-primary btn-back">
+                        <i class="ri-arrow-left-line"></i> Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <h3 class="footer-title">YAHYA Mobility</h3>
+                <p style="color:var(--text-muted);">Conduisez plus, payez moins</p>
+                <p style="color:var(--text-muted); margin-top:var(--space-sm);">Location de voitures au Maroc – Tétouan, Casablanca, Tanger.</p>
+            </div>
+            <div>
+                <h3 class="footer-title">Liens utiles</h3>
+                <ul class="footer-links">
+                    <li><a href="cars.html">Véhicules</a></li>
+                    <li><a href="index.html#contact-section">Contact</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="conditions.html">Conditions générales</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Destinations populaires</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Aéroport de Tétouan</a></li>
+                    <li><a href="#">Aéroport de Casablanca</a></li>
+                    <li><a href="#">Aéroport de Tanger</a></li>
+                    <li><a href="#">Aéroport de Rabat</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <p>&copy; 2026 YAHYA Mobility. Tous droits réservés.</p>
+            <p>Location de voitures agréée – Réservez en ligne dès maintenant.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script>
+        // ── Mobile Nav ──
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        if (navToggle) {
+            navToggle.addEventListener('click', () => {
+                navToggle.classList.toggle('active');
+                navLinks.classList.toggle('open');
+            });
+        }
+
+        // ── Sticky Header ──
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ── Scroll Reveal (vanilla IntersectionObserver) ──
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ── User Interface ──
+        function updateUserInterface() {
+            const currentUser = getCurrentClient();
+            const userMenu = document.getElementById('userMenu');
+            if (!userMenu) return;
+
+            if (currentUser) {
+                userMenu.innerHTML = `
+                    <span style="margin-right: 15px; color:var(--accent);">${currentUser.prenom} ${currentUser.nom}</span>
+                    <button id="logoutBtn" class="btn btn-secondary" style="padding:0.45rem 1.2rem; font-size:0.85rem;">Déconnexion</button>
+                `;
+                document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                    localStorage.removeItem('currentClient');
+                    window.location.href = "login.html";
+                });
+            } else {
+                userMenu.innerHTML = `
+                    <a href="login.html" class="btn-auth btn-outline">Se connecter</a>
+                    <a href="register.html" class="btn-auth">S'inscrire</a>
+                `;
+                const protectedLinks = ['mes-reservations.html', 'mes-contrats.html', 'profil.html'];
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (protectedLinks.includes(href)) link.style.display = 'none';
+                });
+            }
+        }
+
+        // ── Animated Counters ──
+        function animateNumber(element, start, end, duration) {
+            let startTimestamp = null;
+            const suffix = element.getAttribute('data-suffix') || '';
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                element.innerText = Math.floor(progress * (end - start) + start) + suffix;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    element.innerText = end + suffix;
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseInt(el.getAttribute('data-target'));
+                    if (!isNaN(target)) {
+                        animateNumber(el, 0, target, 2000);
+                    }
+                    statObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-number').forEach(el => {
+            const target = el.getAttribute('data-target');
+            if (target) {
+                statObserver.observe(el);
+            }
+        });
+
+        // ── Init ──
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUserInterface();
+            hideCurrentPageLink();
+        });
+    </script>
+</body>
+</html>

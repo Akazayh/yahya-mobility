@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAHYA Mobility - Connexion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        body {
+            position: relative;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('../assets/images/welcome.jpeg') no-repeat center center/cover;
+            font-family: var(--font-body);
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(6,6,17,0.82) 0%, rgba(6,6,17,0.55) 50%, rgba(59,130,246,0.10) 100%);
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle at 30% 40%, rgba(59,130,246,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(16,185,129,0.05) 0%, transparent 50%);
+            animation: loginOrb 20s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes loginOrb {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 460px;
+            padding: 0 var(--space-xl);
+            animation: loginFadeUp 0.8s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        @keyframes loginFadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-brand {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .login-brand .brand-logo {
+            height: 56px;
+            width: auto;
+            margin-bottom: var(--space-md);
+            filter: drop-shadow(0 0 20px rgba(59,130,246,0.3));
+        }
+
+        .login-brand h1 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 30%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.03em;
+            margin-bottom: var(--space-xs);
+        }
+
+        .login-brand p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .login-card {
+            background: rgba(17, 24, 39, 0.65);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: var(--space-2xl);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4),
+                        0 0 0 1px rgba(59,130,246,0.1) inset;
+            transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+        }
+
+        .login-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 32px 70px rgba(0,0,0,0.5),
+                        0 0 0 1px rgba(59,130,246,0.2) inset,
+                        0 0 40px rgba(59,130,246,0.08);
+        }
+
+        .login-card h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xl);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .form-field {
+            position: relative;
+            margin-bottom: var(--space-md);
+        }
+
+        .form-field .field-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+            font-size: 1.15rem;
+            z-index: 2;
+            pointer-events: none;
+            transition: color 0.2s var(--ease);
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 14px 16px 14px 50px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            outline: none;
+            font-family: var(--font-body);
+            transition: all 0.25s var(--ease);
+        }
+
+        .form-field input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .form-field input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-field input:focus + .field-icon,
+        .form-field input:focus ~ .field-icon {
+            color: var(--accent);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            z-index: 3;
+            transition: color 0.2s var(--ease);
+            background: transparent;
+            border: none;
+            padding: 4px;
+        }
+
+        .toggle-password:hover {
+            color: var(--text-primary);
+        }
+
+        .forgot-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: var(--space-lg);
+        }
+
+        .forgot-row a {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: color 0.2s var(--ease);
+        }
+
+        .forgot-row a:hover {
+            color: var(--accent);
+        }
+
+
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: var(--space-lg) 0;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .divider span {
+            padding: 0 var(--space-md);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+
+
+        .register-link {
+            text-align: center;
+            margin-top: var(--space-xl);
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+        }
+
+        .register-link a {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s var(--ease);
+        }
+
+        .register-link a:hover {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+
+        #error {
+            color: var(--red);
+            margin-top: var(--space-md);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: center;
+            min-height: 1.2em;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-xl);
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            max-width: 440px;
+            width: 100%;
+            padding: var(--space-2xl);
+            border: 1px solid var(--border);
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            animation: modalFadeIn 0.3s var(--ease) forwards;
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+        }
+
+        @keyframes modalFadeIn {
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-content h3 {
+            font-family: var(--font-heading);
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+
+        .modal-content .modal-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-lg);
+            line-height: 1.5;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: var(--space-md);
+            right: var(--space-lg);
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s var(--ease);
+            line-height: 1;
+            background: none;
+            border: none;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-content .form-field {
+            margin-bottom: var(--space-lg);
+        }
+
+        .modal-content .form-field input {
+            padding-left: 50px;
+        }
+
+
+
+        @media (max-width: 520px) {
+            .login-card {
+                padding: var(--space-xl);
+            }
+            .login-brand h1 {
+                font-size: 1.7rem;
+            }
+            .login-wrapper {
+                padding: 0 var(--space-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-brand">
+            <a href="accueil.html"><img src="../assets/images/logo.png" alt="YAHYA Mobility" class="brand-logo"></a>
+            <h1>Bienvenue</h1>
+            <p>Connectez-vous pour accéder à votre compte</p>
+        </div>
+
+        <div class="login-card">
+            <div class="form-field">
+                <input type="email" id="email" placeholder="Adresse email">
+                <i class="ri-mail-line field-icon"></i>
+            </div>
+            <div class="form-field">
+                <input type="password" id="password" placeholder="Mot de passe">
+                <i class="ri-lock-line field-icon"></i>
+                <button type="button" class="toggle-password" id="togglePassword" aria-label="Afficher le mot de passe">
+                    <i class="ri-eye-off-line"></i>
+                </button>
+            </div>
+
+            <div class="forgot-row">
+                <a href="#" id="forgotPasswordLink">Mot de passe oublié ?</a>
+            </div>
+
+            <button class="btn-login" id="loginBtn">
+                <i class="ri-login-box-line"></i>
+                Se connecter
+            </button>
+
+            <div class="divider"><span>ou</span></div>
+
+            <button class="btn-google" id="googleLoginBtn">
+                <i class="ri-google-line"></i>
+                Continuer avec Google
+            </button>
+
+            <div class="register-link">
+                Pas encore de compte ? <a href="register.html">Inscrivez-vous</a>
+            </div>
+
+            <div id="error"></div>
+        </div>
+    </div>
+
+    <!-- Modal Mot de passe oublié -->
+    <div id="resetModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <h3>Réinitialiser le mot de passe</h3>
+            <p class="modal-desc">Saisissez votre email pour recevoir un lien de réinitialisation.</p>
+            <div class="form-field">
+                <input type="email" id="resetEmail" placeholder="Votre email">
+                <i class="ri-mail-line field-icon"></i>
+            </div>
+            <button class="btn-reset" id="sendResetLinkBtn">
+                <i class="ri-send-plane-line"></i> Envoyer le lien
+            </button>
+        </div>
+    </div>
+
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script>
+        // Helper: récupérer client par email
+        function getClientByEmail(email) {
+            const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+            return clients.find(c => c.email === email);
+        }
+
+        // Simulation d'envoi de lien de réinitialisation
+        function sendResetLink(email) {
+            const client = getClientByEmail(email);
+            if (!client) {
+                alert("Aucun compte trouvé avec cet email.");
+                return false;
+            }
+            const resetToken = Math.random().toString(36).substring(2, 15);
+            localStorage.setItem(`reset_${email}`, resetToken);
+            const resetLink = `${window.location.origin}${window.location.pathname.replace('login.html', 'reset-password.html')}?token=${resetToken}&email=${email}`;
+            alert(`Un lien de réinitialisation a été envoyé à ${email}.\n\nLien de démonstration : ${resetLink}\n\n(Vous pouvez créer une page reset-password.html pour finaliser.)`);
+            return true;
+        }
+
+        // Fonction de connexion (email/password)
+        async function handleLogin(email, password) {
+            if (!email || !password) {
+                document.getElementById('error').innerText = "Veuillez remplir tous les champs.";
+                return false;
+            }
+            const hashedInput = await hashPassword(password);
+            const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+            const user = clients.find(c => c.email === email && c.password === hashedInput);
+            if (!user) {
+                document.getElementById('error').innerText = "Email ou mot de passe incorrect.";
+                return false;
+            }
+            localStorage.setItem('currentClient', JSON.stringify(user));
+            if (isAdmin(user)) {
+                window.location.href = "../admin/dashboard.html";
+            } else {
+                window.location.href = "accueil.html";
+            }
+            return true;
+        }
+
+        // Simulation Google Login
+        function googleLogin() {
+            alert("Connexion avec Google (simulation).\nDans une vraie application, cela utiliserait OAuth 2.0.\nVous pouvez vous inscrire normalement.");
+        }
+
+        // Événements
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            await handleLogin(email, password);
+        });
+
+        document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('resetModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('resetModal').style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('resetModal');
+            if (e.target === modal) modal.style.display = 'none';
+        });
+
+        document.getElementById('sendResetLinkBtn').addEventListener('click', async () => {
+            const email = document.getElementById('resetEmail').value.trim();
+            if (!email) {
+                alert("Veuillez entrer votre email.");
+                return;
+            }
+            await sendResetLink(email);
+            document.getElementById('resetModal').style.display = 'none';
+        });
+
+        document.getElementById('googleLoginBtn').addEventListener('click', googleLogin);
+
+        // Appuyer sur Entrée pour soumettre
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('loginBtn').click();
+            }
+        });
+
+        // Afficher/masquer le mot de passe
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                icon.classList.toggle('ri-eye-line');
+                icon.classList.toggle('ri-eye-off-line');
+            });
+        }
+    </script>
+</body>
+</html>
