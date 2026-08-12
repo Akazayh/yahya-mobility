@@ -56,11 +56,19 @@ The project focuses on:
 - GitHub Pages
 
 ---
-
 ## 📸 Screenshots
 
-<!-- Add project screenshots here -->
+### Homepage
+![Homepage](screenshots/home.png)
 
+### Vehicle Catalogue
+![Cars](screenshots/cars.png)
+
+### Vehicle Details
+![Car Details](screenshots/car-details.png)
+
+### Profil
+![Profil](screenshots/about.png)
 ---
 
 ## 📂 Project Structure
