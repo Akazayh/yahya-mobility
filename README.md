@@ -88,3 +88,36 @@ yahya-mobility/
     ├── js/
     ├── images/
     └── videos/
+🚙 Vehicle Catalogue
+The platform currently includes vehicles from brands such as:
+Audi
+BMW
+Mercedes-Benz
+Porsche
+Range Rover
+Volkswagen
+📍 Locations
+Current rental locations include:
+Casablanca
+Tetouan
+🚀 Run Locally
+Clone the repository:
+git clone https://github.com/Akazayh/yahya-mobility.git
+Open the project directory:
+cd yahya-mobility
+Then open:
+index.html
+or serve the project using any static web server.
+🌍 Deployment
+The public client is deployed using GitHub Pages.
+Live Website
+https://akazayh.github.io/yahya-mobility/⁠�
+🔐 Deployment Note
+This repository contains only the public client-facing version of the project.
+Private administration files and backend development files are not part of the public deployment repository.
+👨‍💻 Author
+Akazayh
+GitHub: https://github.com/Akazayh⁠�
+📄 License
+This project was created as an educational / graduation project.
+
