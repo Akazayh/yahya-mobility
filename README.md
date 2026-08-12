@@ -7,7 +7,7 @@
 
 ## 🌐 Live Demo
 
-🚗 **[Visit YAHYA Mobility →](https://akazayh.github.io/yahya-mobility/)**
+ **[Visit YAHYA Mobility →](https://akazayh.github.io/yahya-mobility/)**
 ---
 
 ## 📖 Overview
