@@ -68,7 +68,7 @@ The project focuses on:
 ![Car Details](screenshots/car-details.png)
 
 ### Profil
-![Profil](screenshots/about.png)
+![Profil](screenshots/profil.png)
 ---
 
 ## 📂 Project Structure
